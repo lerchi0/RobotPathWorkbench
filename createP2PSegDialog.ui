@@ -28,7 +28,7 @@
       <number>5</number>
      </property>
      <property name="text">
-      <string>Create Linear Path Segment</string>
+      <string>Create P2P Path Segment</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

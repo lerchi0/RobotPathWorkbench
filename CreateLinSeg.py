@@ -1,22 +1,45 @@
 import FreeCADGui as Gui
 import FreeCAD as App
-
-
+import Part
+from PySide import QtGui
+from PySide import QtCore
+from PySide.QtUiTools import QUiLoader
+import os
 import RPWlib
-
+import Movements
+import json
+path_to_ui = "C:/Users/t-ler/AppData/Roaming/FreeCAD/Mod/RobotPathWorkbench//createLinSegDialog.ui"
 
 
 class CreateLinSeg():
 
     def __init__(self):
-        self.ui_path = RPWlib.pathOfModule() + "/createLinSegDialog.ui"
-        self.form = Gui.PySideUic.loadUi(self.ui_path)
-        self.form.setWindowTitle("Create Linear Segment")
-        self.form.pushButton_CreateSegment.clicked.connect(lambda:self.createLinPath())
-        self.form.pushButton_updateStartPos.clicked.connect(lambda:self.updateStartPos())
-        self.form.pushButton_updateEndPos.clicked.connect(lambda:self.updateEndPos())
-        self.form.closeBtn.clicked.connect(lambda:self.close())
-        
+        # self.ui_path = RPWlib.pathOfModule() + "/createLinSegDialog.ui"
+        # self.form = Gui.PySideUic.loadUi(self.ui_path)
+        # self.form.setWindowTitle("Create Linear Segment")
+        # self.form.pushButton_CreateSegment.clicked.connect(lambda:self.createLinPath())
+        # self.form.pushButton_updateStartPos.clicked.connect(lambda:self.updateStartPos())
+        # self.form.pushButton_updateEndPos.clicked.connect(lambda:self.updateEndPos())
+        # self.form.closeBtn.clicked.connect(lambda:self.close())
+        self.form = Gui.PySideUic.loadUi(path_to_ui)
+
+    def accept(self):
+        global movementId
+        global movementList
+        doc = App.activeDocument()
+        startPoint = [self.form.Box_Start_X.value(), self.form.Box_Start_Y.value(), self.form.Box_Start_Z.value()]
+        endPoint = [self.form.Box_End_X.value(), self.form.Box_End_Y.value(), self.form.Box_End_Z.value()]
+
+        movementList.append(Movements.LinearMovement(id= movementId,sPoint=startPoint, ePoint= endPoint).__dict__)
+        movementId = movementId +1
+        fullpath = doc.FileName
+        index = fullpath.rfind("/")
+        path = fullpath[:index+1]
+        savepath = path +"Test.json"
+        with open(savepath, 'w') as outfile:
+            json.dump(movementList, outfile, indent=4)
+
+        Gui.Control.closeDialog()
 
     def createLinPath(self):
         startX = self.form.StartpointX.value()
@@ -74,24 +97,5 @@ class CreateLinSeg():
         self.form.EndpointY.setValue(y)
         self.form.EndpointZ.setValue(z)
 
+    
 
-class CreateLinSegCmd():
-    """My new command"""
-
-    def GetResources(self):
-        return {'Pixmap'  : RPWlib.pathOfModule() + "/icons/WB_linSegCMD_2_icon.svg", # the name of a svg file available in the resources
-                'Accel' : "Alt+S", # a default shortcut (optional)
-                'MenuText': "Create a Linear Segment between two points",
-                'ToolTip' : "Generate a new linear Segment"}
-
-    def Activated(self):
-        panel = CreateLinSeg()
-        panel.form.show()
-        return
-
-    def IsActive(self):
-        """Here you can define if the command must be active or not (greyed) if certain conditions
-        are met or not. This function is optional."""
-        return True
-
-Gui.addCommand('Create_Linear_Segment',CreateLinSegCmd())

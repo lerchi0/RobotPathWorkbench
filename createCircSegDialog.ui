@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>426</width>
-    <height>445</height>
+    <height>615</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,7 +28,7 @@
       <number>5</number>
      </property>
      <property name="text">
-      <string>Create Linear Path Segment</string>
+      <string>Create Circular Path Segment</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -38,10 +38,20 @@
    <item row="2" column="2">
     <widget class="QDoubleSpinBox" name="Box_Start_X"/>
    </item>
+   <item row="9" column="2">
+    <widget class="QDoubleSpinBox" name="Box_End_Y"/>
+   </item>
    <item row="3" column="1">
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>Y:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Startpoint</string>
      </property>
     </widget>
    </item>
@@ -65,19 +75,31 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Y:</string>
-     </property>
-    </widget>
-   </item>
    <item row="5" column="1">
     <widget class="QLabel" name="label_7">
      <property name="text">
       <string>X:</string>
      </property>
     </widget>
+   </item>
+   <item row="8" column="2">
+    <widget class="QDoubleSpinBox" name="Box_End_X"/>
+   </item>
+   <item row="7" column="2">
+    <widget class="QDoubleSpinBox" name="Box_Mid_Z"/>
+   </item>
+   <item row="6" column="2">
+    <widget class="QDoubleSpinBox" name="Box_Mid_Y"/>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Midpoint</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QDoubleSpinBox" name="Box_Mid_X"/>
    </item>
    <item row="7" column="1">
     <widget class="QLabel" name="label_9">
@@ -86,24 +108,39 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="2">
-    <widget class="QDoubleSpinBox" name="Box_End_X"/>
-   </item>
-   <item row="6" column="2">
-    <widget class="QDoubleSpinBox" name="Box_End_Y"/>
-   </item>
-   <item row="7" column="2">
-    <widget class="QDoubleSpinBox" name="Box_End_Z"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_2">
+   <item row="6" column="1">
+    <widget class="QLabel" name="label_8">
      <property name="text">
-      <string>Startpoint:</string>
+      <string>Y:</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_3">
+   <item row="10" column="2">
+    <widget class="QDoubleSpinBox" name="Box_End_Z"/>
+   </item>
+   <item row="8" column="1">
+    <widget class="QLabel" name="label_10">
+     <property name="text">
+      <string>X:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1">
+    <widget class="QLabel" name="label_11">
+     <property name="text">
+      <string>Y:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1">
+    <widget class="QLabel" name="label_12">
+     <property name="text">
+      <string>Z:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="label_13">
      <property name="text">
       <string>Endpoint</string>
      </property>

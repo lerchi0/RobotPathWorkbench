@@ -3,20 +3,25 @@ import FreeCAD as App
 
 
 import RPWlib
+import Movements
+import json
 
 import Part,PartGui
 
-
+movementList = []
+movementId = 0
 class TestCMD_1():
 
     def __init__(self):   
         pass
+       
 
     def printObjectCenter(self):
         sel = Gui.Selection.getSelection()   
         mydoc = App.activeDocument().Name
         document_ = mydoc
-
+        global movementId
+        global movementList
         try:
             object_Label = sel[0].Label
             object_Name  = sel[0].Name
@@ -68,8 +73,17 @@ class TestCMD_1():
             App.Console.PrintMessage("end = {}\r\n".format(endPoint.Point))
             App.Console.PrintMessage("center = {}\r\n".format(pos))
             App.Console.PrintMessage("direction = {}\r\n".format(direction))
-            App.Console.PrintMessage("\r\n")
             s = Part.makeSphere(0.5,pos)
+            movementList.append(Movements.LinearMovement(id= movementId,sPoint=startPoint.Point, ePoint= endPoint.Point ).__dict__)
+            movementId = movementId +1
+            fullpath = doc.FileName
+            index = fullpath.rfind("/")
+            path = fullpath[:index+1]
+            savepath = path +"Test.json"
+            with open(savepath, 'w') as outfile:
+                json.dump(movementList, outfile, indent=4)
+           
+           
             Part.show(s)
 
 class TestCMD_1_CMD():
