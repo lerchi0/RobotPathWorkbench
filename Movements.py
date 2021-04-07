@@ -27,13 +27,13 @@ class P2PMovement(Movement):
         self.startPoint = {}
         self.endPoint = {}
 
-        self.startPoint["X"] = int(sPoint[0][0])
-        self.startPoint["Y"] = int(sPoint[1][0])
-        self.startPoint["Z"] = int(sPoint[2][0])
-        self.endPoint["X"] = int(ePoint[0][0])
-        self.endPoint["Y"] = int(ePoint[1][0])
-        self.endPoint["Z"] = int(ePoint[2][0])
-        self.speed = int(speed)
+        self.startPoint["X"] = sPoint[0]
+        self.startPoint["Y"] = sPoint[1]
+        self.startPoint["Z"] = sPoint[2]
+        self.endPoint["X"] = ePoint[0]
+        self.endPoint["Y"] = ePoint[1]
+        self.endPoint["Z"] = ePoint[2]
+        self.speed = speed
 
 class CircularMovement(Movement):
     def __init__(self, id,sPoint,mPoint, ePoint, speed = 50):
@@ -42,16 +42,16 @@ class CircularMovement(Movement):
         self.midPoint = {}
         self.endPoint = {}
         
-        self.startPoint["X"] = int(sPoint[0][0])
-        self.startPoint["Y"] = int(sPoint[1][0])
-        self.startPoint["Z"] = int(sPoint[2][0])
-        self.midPoint["X"] = int(mPoint[0][0])
-        self.midPoint["Y"] = int(mPoint[1][0])
-        self.midPoint["Z"] = int(mPoint[2][0])
-        self.endPoint["X"] = int(ePoint[0][0])
-        self.endPoint["Y"] = int(ePoint[1][0])
-        self.endPoint["Z"] = int(ePoint[2][0])
-        self.speed = int(speed)
+        self.startPoint["X"] = sPoint[0]
+        self.startPoint["Y"] = sPoint[1]
+        self.startPoint["Z"] = sPoint[2]
+        self.midPoint["X"] = mPoint[0]
+        self.midPoint["Y"] = mPoint[1]
+        self.midPoint["Z"] = mPoint[2]
+        self.endPoint["X"] = ePoint[0]
+        self.endPoint["Y"] = ePoint[1]
+        self.endPoint["Z"] = ePoint[2]
+        self.speed = speed
 
 
 if __name__ == "__main__":

@@ -1,7 +1,9 @@
 import FreeCADGui as Gui
 import FreeCAD as App
+
+
 class RobotPathWorkbench (Workbench):
-  
+    
 
     def __init__(self):
         import RPWlib
@@ -11,13 +13,16 @@ class RobotPathWorkbench (Workbench):
 
     def Initialize(self):
         """This function is executed when FreeCAD starts"""
-        import CreateLinSeg
+        import CreateSeg
         import TestCMDs
-        self.list = ["Create_Linear_Segment"] # A list of command names created in the line above
+        self.list = ["Create_Linear_Segment","Create_P2P_Segment","Create_Circular_Segment"] # A list of command names created in the line above
         self.testCMDs = ["Print_Selected_ObjectCenter"]
         self.appendToolbar("Add Segment",self.list) # creates a new toolbar with your commands
         
+        
     def Activated(self):
+        import RPWlib
+        RPWlib.reloadMovementList()
         """This function is executed when the workbench is activated"""
         return
 
