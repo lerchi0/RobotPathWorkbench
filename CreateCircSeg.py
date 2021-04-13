@@ -20,7 +20,22 @@ class CreateCircSeg():
         startPoint = [self.form.Box_Start_X.value(), self.form.Box_Start_Y.value(), self.form.Box_Start_Z.value()]
         midPoint = [self.form.Box_Mid_X.value(), self.form.Box_Mid_Y.value(), self.form.Box_Mid_Z.value()]
         endPoint = [self.form.Box_End_X.value(), self.form.Box_End_Y.value(), self.form.Box_End_Z.value()]
-
+        mid = App.Vector(midPoint[0],midPoint[1],midPoint[2])
+        start = App.Vector(startPoint[0], startPoint[1], startPoint[2])
+        end   = App.Vector(endPoint[0], endPoint[1], endPoint[2])
+        vec1 = start - mid
+        vec2 = end - mid
+        norm = vec1.cross(vec2)
+        angle = vec1.getAngle(vec2)
+        angleDeg = angle*180/3.14159
+        rad = vec1.Length
+        App.Console.PrintMessage("\nAngle: {}\nLength: {}\nNorm: {}".format(angle, rad, norm))
+        arc = Part.Arc(start,mid,end)
+        myLine = arc.toShape()
+        shape=App.ActiveDocument.addObject("Part::Feature")
+        shape.Shape=myLine
+        App.ActiveDocument.recompute()
+        shape.ViewObject.LineColor=(1.0,0.0,0.0)
         RPWlib.MovementList.List.append(Movements.CircularMovement(id= RPWlib.MovementList.currentId,sPoint=startPoint, mPoint=midPoint,ePoint= endPoint).__dict__)
         RPWlib.MovementList.currentId = RPWlib.MovementList.currentId +1
        
