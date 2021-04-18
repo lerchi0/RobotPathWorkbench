@@ -14,8 +14,9 @@ class RobotPathWorkbench (Workbench):
     def Initialize(self):
         """This function is executed when FreeCAD starts"""
         import CreateSeg
+        import AddOrigin
         import TestCMDs
-        self.list = ["Create_Linear_Segment","Create_P2P_Segment","Create_Circular_Segment"] # A list of command names created in the line above
+        self.list = ["Add_Origin_Command","Create_Linear_Segment","Create_P2P_Segment","Create_Circular_Segment"] # A list of command names created in the line above
         self.testCMDs = ["Print_Selected_ObjectCenter"]
         self.appendToolbar("Add Segment",self.list) # creates a new toolbar with your commands
         
