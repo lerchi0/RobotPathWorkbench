@@ -5,8 +5,7 @@ import os
 import RPWlib
 import Movements
 import json
-path_to_ui = "C:/Users/t-ler/AppData/Roaming/FreeCAD/Mod/RobotPathWorkbench//createP2PSegDialog.ui"
-
+path_to_ui = RPWlib.pathOfModule() + "/createP2PSegDialog.ui"
 
 class CreateP2PSeg():
 

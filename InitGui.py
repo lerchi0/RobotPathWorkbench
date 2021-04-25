@@ -16,14 +16,17 @@ class RobotPathWorkbench (Workbench):
         import CreateSeg
         import AddOrigin
         import TestCMDs
-        self.list = ["Add_Origin_Command","Create_Linear_Segment","Create_P2P_Segment","Create_Circular_Segment"] # A list of command names created in the line above
+        self.segmentCommands = ["Create_Linear_Segment","Create_P2P_Segment","Create_Circular_Segment"] # A list of command names created in the line above
+        self.mainCommands = ["Add_Origin_Command"]
         self.testCMDs = ["Print_Selected_ObjectCenter"]
-        self.appendToolbar("Add Segment",self.list) # creates a new toolbar with your commands
+
+        self.appendToolbar("Main Commands",self.mainCommands)
+        self.appendToolbar("Add Segment",self.segmentCommands) # creates a new toolbar with your commands
         
         
     def Activated(self):
-        import RPWlib
-        RPWlib.reloadMovementList()
+        #import RPWlib
+        #RPWlib.reloadMovementList()
         """This function is executed when the workbench is activated"""
         return
 

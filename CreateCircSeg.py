@@ -5,7 +5,7 @@ import os
 import RPWlib
 import Movements
 import json
-path_to_ui = "C:/Users/t-ler/AppData/Roaming/FreeCAD/Mod/RobotPathWorkbench//createCircSegDialog.ui"
+path_to_ui = RPWlib.pathOfModule() + "/createCircSegDialog.ui"
 
 
 class CreateCircSeg():
