@@ -1,5 +1,6 @@
 import numpy as np
 import json
+import RPWClasses
 
 class Movement(object):
     def __init__(self, type,id):
@@ -8,17 +9,10 @@ class Movement(object):
         
 
 class LinearMovement(Movement):
-    def __init__(self, id,sPoint, ePoint, speed = 50):
+    def __init__(self,id,sPoint, ePoint, speed = 50):
         super().__init__("Linear", id)
-        self.startPoint = {}
-        self.endPoint = {}
-
-        self.startPoint["X"] = sPoint[0]
-        self.startPoint["Y"] = sPoint[1]
-        self.startPoint["Z"] = sPoint[2]
-        self.endPoint["X"] = ePoint[0]
-        self.endPoint["Y"] = ePoint[1]
-        self.endPoint["Z"] = ePoint[2]
+        self.startPoint = RPWClasses.Pathpoint(position = sPoint).__dict__
+        self.endPoint = RPWClasses.Pathpoint(position = ePoint).__dict__
         self.speed = speed
 
 class P2PMovement(Movement):

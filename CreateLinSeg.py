@@ -27,9 +27,9 @@ class CreateLinSeg():
         App.ActiveDocument.recompute()
         shape.ViewObject.LineColor=(1.0,0.0,1.0)
         RPWlib.MovementList.List.append(Movements.LinearMovement(id= RPWlib.MovementList.currentId,sPoint=startPoint, ePoint= endPoint).__dict__)
-        RPWlib.MovementList.currentId = RPWlib.MovementList.currentId +1
+        RPWlib.MovementList.currentId = RPWlib.MovementList.currentId + 1
         with open(RPWlib.MovementList.pathToFile, 'w') as outfile:
-            json.dump(RPWlib.MovementList.List, outfile, indent=4)
+            outfile.write(json.JSONEncoder().encode(RPWlib.MovementList.List))
 
 
     def updateStartPos(self):

@@ -25,8 +25,8 @@ class RobotPathWorkbench (Workbench):
         
         
     def Activated(self):
-        #import RPWlib
-        #RPWlib.reloadMovementList()
+        import RPWlib
+        RPWlib.reloadMovementList()
         """This function is executed when the workbench is activated"""
         return
 

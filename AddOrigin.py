@@ -6,6 +6,7 @@ from PySide import QtCore
 from PySide.QtUiTools import QUiLoader
 import os
 import RPWlib
+import RPWClasses
 import json
 
 path_to_ui = RPWlib.pathOfModule() + "/updateOrigin.ui"
@@ -19,12 +20,19 @@ class AddOrigin():
 
 
     def accept(self):
+        zPos = self.form.Box_Origin_Z.value()
+        yPos = self.form.Box_Origin_Y.value()
+        xPos = self.form.Box_Origin_X.value()
         zRot = self.form.Box_Rot_Z.value()
         yRot = self.form.Box_Rot_Y.value()
         xRot = self.form.Box_Rot_X.value()
-        originPoint = App.Vector(self.form.Box_Origin_X.value(),self.form.Box_Origin_Y.value(),self.form.Box_Origin_Z.value())
-        lcs = App.activeDocument().addObject( 'PartDesign::CoordinateSystem', 'LCS' )
+        csName = self.form.Box_Origin_Name.text()
+        originPoint = App.Vector(xPos,yPos,zPos)
+        lcs = App.activeDocument().addObject( 'PartDesign::CoordinateSystem', csName )
         lcs.Placement = App.Placement(originPoint,App.Rotation(zRot,yRot,xRot))
+        robotOrig = RPWClasses.CoordinateSystem(None,[xPos,yPos,zPos],[zRot,yRot,xRot],0,csName)
+        App.Console.PrintMessage(json.JSONEncoder().encode(robotOrig.__dict__))
+        
     
     def updateOriginPos(self):
         sel = Gui.Selection.getSelection()   
