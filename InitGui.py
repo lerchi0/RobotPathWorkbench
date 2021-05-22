@@ -2,8 +2,7 @@ import FreeCADGui as Gui
 import FreeCAD as App
 
 
-class RobotPathWorkbench (Workbench):
-    
+class RobotPathWorkbench(Workbench):
 
     def __init__(self):
         import RPWlib
@@ -16,8 +15,9 @@ class RobotPathWorkbench (Workbench):
         import CreateSeg
         import AddOrigin
         import TestCMDs
+        import AddPoints
         self.segmentCommands = ["Create_Linear_Segment","Create_P2P_Segment","Create_Circular_Segment"] # A list of command names created in the line above
-        self.mainCommands = ["Add_Origin_Command"]
+        self.mainCommands = ["Add_Origin_Command", "Add_Points_Command"]
         self.testCMDs = ["Print_Selected_ObjectCenter"]
 
         self.appendToolbar("Main Commands",self.mainCommands)
@@ -25,8 +25,19 @@ class RobotPathWorkbench (Workbench):
         
         
     def Activated(self):
+        import RPWClasses
         import RPWlib
-        RPWlib.reloadMovementList()
+        import json
+        
+        RPWlib.config = RPWClasses.ProjectConfiguration()
+        RPWlib.config.readConfig()
+        App.Console.PrintMessage(RPWlib.config.configData)
+        RPWlib.config.writeConfig()
+        App.open(RPWlib.config.configData["PathToCell"]) 
+
+
+        #RPWlib.reloadMovementList()
+        RPWlib.reloadPointsList()
         """This function is executed when the workbench is activated"""
         return
 
@@ -43,5 +54,5 @@ class RobotPathWorkbench (Workbench):
         # This function is mandatory if this is a full python workbench
         # This is not a template, the returned string should be exactly "Gui::PythonWorkbench"
         return "Gui::PythonWorkbench"
-       
+
 Gui.addWorkbench(RobotPathWorkbench())

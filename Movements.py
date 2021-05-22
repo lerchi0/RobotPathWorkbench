@@ -3,21 +3,20 @@ import json
 import RPWClasses
 
 class Movement(object):
-    def __init__(self, type,id):
-        self.id = id
+    def __init__(self, type):
         self.type = type
         
 
 class LinearMovement(Movement):
-    def __init__(self,id,sPoint, ePoint, speed = 50):
-        super().__init__("Linear", id)
+    def __init__(self,sPoint, ePoint, speed = 50):
+        super().__init__("Linear")
         self.startPoint = RPWClasses.Pathpoint(position = sPoint).__dict__
         self.endPoint = RPWClasses.Pathpoint(position = ePoint).__dict__
         self.speed = speed
 
 class P2PMovement(Movement):
-    def __init__(self, id,sPoint, ePoint, speed = 50):
-        super().__init__("P2P", id)
+    def __init__(self,sPoint, ePoint, speed = 50):
+        super().__init__("P2P")
         self.startPoint = {}
         self.endPoint = {}
 
@@ -30,8 +29,8 @@ class P2PMovement(Movement):
         self.speed = speed
 
 class CircularMovement(Movement):
-    def __init__(self, id,sPoint,mPoint, ePoint, speed = 50):
-        super().__init__("Circular", id)
+    def __init__(self,sPoint,mPoint, ePoint, speed = 50):
+        super().__init__("Circular")
         self.startPoint = {}
         self.midPoint = {}
         self.endPoint = {}
@@ -57,10 +56,10 @@ if __name__ == "__main__":
         eP = np.random.randint(21, size =(3,1))
         s = np.random.randint(100)
         if i%3 == 0:
-            lst.append(LinearMovement(id = i,sPoint= sP, ePoint=eP,speed= s).__dict__)
+            lst.append(LinearMovement(sPoint= sP, ePoint=eP,speed= s).__dict__)
         elif i%3 == 1:
-            lst.append(P2PMovement(id = i,sPoint= sP, ePoint=eP,speed= s).__dict__)
+            lst.append(P2PMovement(sPoint= sP, ePoint=eP,speed= s).__dict__)
         elif i%3 == 2:
-            lst.append(CircularMovement(id = i,sPoint= sP,mPoint=mP, ePoint=eP,speed= s).__dict__)         
+            lst.append(CircularMovement(sPoint= sP,mPoint=mP, ePoint=eP,speed= s).__dict__)         
     print(json.dumps(lst, indent=4))
     

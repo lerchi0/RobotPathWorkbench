@@ -9,33 +9,18 @@ import RPWlib
 import RPWClasses
 import json
 
-path_to_ui = RPWlib.pathOfModule() + "/updateOrigin.ui"
+path_to_ui = RPWlib.pathOfModule() + "/pointsView.ui"
+path_to_widget = RPWlib.pathOfModule() + "/pointsDisp.ui"
 
-
-class AddOrigin():
-
+class AddPoints():
     def __init__(self):
         self.form = Gui.PySideUic.loadUi(path_to_ui)
-        self.form.buttonSetStart.clicked.connect(lambda: self.updateOriginPos())
 
 
     def accept(self):
-        zPos = self.form.Box_Origin_Z.value()
-        yPos = self.form.Box_Origin_Y.value()
-        xPos = self.form.Box_Origin_X.value()
-        zRot = self.form.Box_Rot_Z.value()
-        yRot = self.form.Box_Rot_Y.value()
-        xRot = self.form.Box_Rot_X.value()
-        csName = self.form.Box_Origin_Name.text()
-        originPoint = App.Vector(xPos,yPos,zPos)
-        lcs = App.activeDocument().addObject( 'PartDesign::CoordinateSystem', csName )
-        lcs.Placement = App.Placement(originPoint,App.Rotation(zRot,yRot,xRot))
-        robotOrig = RPWClasses.CoordinateSystem(None,[xPos,yPos,zPos],[zRot,yRot,xRot],0,csName)
-        App.Console.PrintMessage(json.JSONEncoder().encode(robotOrig.__dict__))
-        RPWlib.config.configData["Origin"] = robotOrig.__dict__
-        RPWlib.config.writeConfig()
+       pass
 
-    def updateOriginPos(self):
+    def updatePos(self):
         sel = Gui.Selection.getSelection()   
         mydoc = App.activeDocument().Name
         document_ = mydoc
@@ -51,26 +36,26 @@ class AddOrigin():
             pos = element_.BoundBox.Center
         except Exception:
             element_ = ""
-        self.form.Box_Origin_X.setValue(pos[0])
-        self.form.Box_Origin_Y.setValue(pos[1])
-        self.form.Box_Origin_Z.setValue(pos[2])
+        #self.form.Box_Origin_X.setValue(pos[0])
+        #self.form.Box_Origin_Y.setValue(pos[1])
+        #self.form.Box_Origin_Z.setValue(pos[2])
         App.Console.PrintMessage("x = {}\r\n".format(pos[0]))
         App.Console.PrintMessage("y = {}\r\n".format(pos[1]))
         App.Console.PrintMessage("z = {}\r\n".format(pos[2]))
         App.Console.PrintMessage("\r\n")
 
 
-class AddOriginCmd():
+class AddPointsCmd():
     """My new command"""
         
     def GetResources(self):
         return {'Pixmap'  : RPWlib.pathOfModule() + "/icons/WB_linSegCMD_2_icon.svg", # the name of a svg file available in the resources
-                'Accel' : "Alt+O", # a default shortcut (optional)
-                'MenuText': "Add Origin to the Model",
-                'ToolTip' : "Add Origin"}
+                'Accel' : "Alt+P", # a default shortcut (optional)
+                'MenuText': "Add Points to the Model",
+                'ToolTip' : "Add Points"}
 
     def Activated(self):
-        panelOrig = AddOrigin()
+        panelOrig = AddPoints()
         Gui.Control.showDialog(panelOrig)
         return True
 
@@ -81,4 +66,4 @@ class AddOriginCmd():
 
 
 
-Gui.addCommand('Add_Origin_Command',AddOriginCmd())
+Gui.addCommand('Add_Points_Command',AddPointsCmd())
