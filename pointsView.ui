@@ -13,16 +13,6 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QListView" name="PointsList">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>90</y>
-     <width>256</width>
-     <height>192</height>
-    </rect>
-   </property>
-  </widget>
  </widget>
  <resources/>
  <connections/>

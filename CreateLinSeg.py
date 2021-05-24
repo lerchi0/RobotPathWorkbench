@@ -5,7 +5,6 @@ import os
 import RPWlib
 import Movements
 import json
-import Part
 path_to_ui = RPWlib.pathOfModule() + "/createLinSegDialog.ui"
 
 
