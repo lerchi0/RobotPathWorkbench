@@ -34,10 +34,6 @@ class RobotPathWorkbench(Workbench):
         App.Console.PrintMessage(RPWlib.config.configData)
         RPWlib.config.writeConfig()
         App.open(RPWlib.config.configData["PathToCell"]) 
-
-
-        #RPWlib.reloadMovementList()
-        RPWlib.reloadPointsList()
         """This function is executed when the workbench is activated"""
         return
 

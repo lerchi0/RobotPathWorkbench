@@ -2,7 +2,7 @@ import datetime
 import PySide2
 import json
 import RPWlib
-
+import FreeCAD as App
 class Pathpoint:
     def __init__(self, position, coordSystem = None):
         self.position = {}
@@ -28,9 +28,11 @@ class ProjectConfiguration:
 
     def readConfig(self):
         keys = ["PathToCell","PathToCoordinateSystems","PathToPoints","PathToMovements","CreatedOn","EditedOn","Origin"]
-        f = open(self.configFile)
+        
         try:
+            f = open(self.configFile)
             data = json.load(f)
+            f.close()
         except:
             data= {}
         for key in keys:
@@ -38,9 +40,10 @@ class ProjectConfiguration:
                 if key != "CreatedOn":
                     data[key] = None
                 data["CreatedOn"] = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")  
-        f.close()
+        
         
         self.configData = data
+        App.Console.PrintMessage(data)
         if self.configData["PathToMovements"] == None:
             movementsPath = RPWlib.reloadMovementList()
             self.configData["PathToMovements"] = movementsPath

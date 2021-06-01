@@ -14,7 +14,10 @@ path_to_widget = RPWlib.pathOfModule() + "/pointsDisp.ui"
 
 class AddPoints():
     def __init__(self):
+        entries = ["One", "Two", "Three"]
         self.form = Gui.PySideUic.loadUi(path_to_ui)
+        for i in entries:
+            self.form.listWidget.addItem(i)
 
 
     def accept(self):

@@ -66,8 +66,10 @@ def reloadPointsList():
         curID = 0
         for el in data["Points"]:
             point = RPWClasses.Pathpoint(position= [el["Position"]["X"],el["Position"]["Y"],el["Position"]["Z"]], coordSystem = el["CoordinateSystem"])
+            PointsList.List.append(point)
             App.Console.PrintMessage(point.__dict__)
             App.Console.PrintMessage("\r\n")
+       
     else:
         PointsList.List = []
     return PointsList.pathToFile
