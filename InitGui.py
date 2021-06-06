@@ -28,7 +28,8 @@ class RobotPathWorkbench(Workbench):
         import RPWClasses
         import RPWlib
         import json
-        
+        RPWlib.MovementList.List = []
+        RPWlib.PointsList.List = []
         RPWlib.config = RPWClasses.ProjectConfiguration()
         RPWlib.config.readConfig()
         App.Console.PrintMessage(RPWlib.config.configData)

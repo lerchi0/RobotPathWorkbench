@@ -14,11 +14,25 @@ path_to_widget = RPWlib.pathOfModule() + "/pointsDisp.ui"
 
 class AddPoints():
     def __init__(self):
-        entries = ["One", "Two", "Three"]
         self.form = Gui.PySideUic.loadUi(path_to_ui)
-        for i in entries:
-            self.form.listWidget.addItem(i)
+        for idx, val in enumerate(RPWlib.PointsList.List):
+            self.form.listWidget.addItem(str(idx))
+        self.form.listWidget.itemClicked.connect(self.printItem)
 
+    def printItem(self,item):
+        point = RPWlib.PointsList.List[int(item.text())]
+
+        self.form.Box_Point_CS.setText(point.coordinateSystem)
+        self.form.Box_Point_ID.setText(item.text())
+        self.form.Box_Point_X.setText(str(point.position["X"]))
+        self.form.Box_Point_Y.setText(str(point.position["Y"]))
+        self.form.Box_Point_Z.setText(str(point.position["Z"]))
+        self.form.Box_Point_Yaw.setText("0")
+        self.form.Box_Point_Pitch.setText("0")
+        self.form.Box_Point_Roll.setText("0")
+
+        App.Console.PrintMessage(RPWlib.PointsList.List[int(item.text())].__dict__)
+        App.Console.PrintMessage("\r\n")
 
     def accept(self):
        pass

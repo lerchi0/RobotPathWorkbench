@@ -9,7 +9,7 @@ class Pathpoint:
         self.position["X"] = position[0]
         self.position["Y"] = position[1]
         self.position["Z"] = position[2]
-        self.coordinateSystem = coordSystem if coordSystem != None else ""
+        self.coordinateSystem = coordSystem if coordSystem != None else "?"
 
 class CoordinateSystem:
     def __init__(self,parentCS, position, rotation, csId ,name):
@@ -47,15 +47,39 @@ class ProjectConfiguration:
         if self.configData["PathToMovements"] == None:
             movementsPath = RPWlib.reloadMovementList()
             self.configData["PathToMovements"] = movementsPath
+        else:
+            pass
+
         if self.configData["PathToCell"] == None:
-            stepFilePath, Filter = PySide2.QtWidgets.QFileDialog.getSaveFileName(None, "Choose the robot cell",  "/", "Robot cells  (*.FCStd);;")
-            self.configData["PathToCell"] = stepFilePath
+            cellPath, Filter = PySide2.QtWidgets.QFileDialog.getSaveFileName(None, "Choose the robot cell",  "/", "Robot cells  (*.FCStd);;")
+            self.configData["PathToCell"] = cellPath
+        else:
+            pass
+
         if self.configData["PathToCoordinateSystems"] == None:
-            stepFilePath, Filter = PySide2.QtWidgets.QFileDialog.getSaveFileName(None, "Choose the Coordinate Systems File",  "/", "Coordinate Systems  (*.coord);;")
-            self.configData["PathToCoordinateSystems"] = stepFilePath
+            csPath, Filter = PySide2.QtWidgets.QFileDialog.getSaveFileName(None, "Choose the Coordinate Systems File",  "/", "Coordinate Systems  (*.coord);;")
+            self.configData["PathToCoordinateSystems"] = csPath
+        else:
+            pass  
         if self.configData["PathToPoints"] == None:
-            stepFilePath=RPWlib.reloadPointsList()
-            self.configData["PathToPoints"] = stepFilePath
+            pointsPath=RPWlib.reloadPointsList()
+            self.configData["PathToPoints"] = pointsPath
+        else:
+            try:
+                f = open(self.configData["PathToPoints"]) 
+                data = json.load(f)
+                f.close()
+            except:
+                App.Console.PrintMessage("\r\n")
+                App.Console.PrintMessage("File is empty/not existing\r\n")
+                data = None
+            App.Console.PrintMessage("\r\n")
+            if data:
+                for el in data["Points"]:
+                    point = Pathpoint(position= [el["Position"]["X"],el["Position"]["Y"],el["Position"]["Z"]], coordSystem = el["CoordinateSystem"])
+                    RPWlib.PointsList.List.append(point)
+            else:
+                RPWlib.PointsList.List = []
             
     
     def writeConfig(self):
