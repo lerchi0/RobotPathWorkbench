@@ -12,36 +12,59 @@ class CreateCircSeg():
 
     def __init__(self):
         self.form = Gui.PySideUic.loadUi(path_to_ui)
-        self.form.buttonSetStart.clicked.connect(lambda: self.updateStartPos())
-        self.form.buttonSetMid.clicked.connect(lambda: self.updateMidPos())
-        self.form.buttonSetEnd.clicked.connect(lambda: self.updateEndPos())
+
+        for idx, point in enumerate(RPWlib.PointsList.List):
+            self.form.Box_Combo_Start.addItem("Point {}".format(idx))
+            self.form.Box_Combo_Mid.addItem("Point {}".format(idx))
+            self.form.Box_Combo_End.addItem("Point {}".format(idx))
+        self.updateStart()
+        self.updateMid()
+        self.updateEnd()
+        self.form.Box_Combo_Start.currentIndexChanged.connect(lambda: self.updateStart())
+        self.form.Box_Combo_Mid.currentIndexChanged.connect(lambda: self.updateMid())
+        self.form.Box_Combo_End.currentIndexChanged.connect(lambda: self.updateEnd())
+
+    def updateStart(self):
+        point = RPWlib.PointsList.List[self.form.Box_Combo_Start.currentIndex()]
+        self.form.Text_Start_X.setText(str(point["position"]["X"]))
+        self.form.Text_Start_Y.setText(str(point["position"]["Y"]))
+        self.form.Text_Start_Z.setText(str(point["position"]["Z"]))
+        self.form.Text_Start_Yaw.setText(str(point["orientation"]["yaw"]))
+        self.form.Text_Start_Pitch.setText(str(point["orientation"]["pitch"]))
+        self.form.Text_Start_Roll.setText(str(point["orientation"]["roll"]))
+    def updateMid(self):
+        point = RPWlib.PointsList.List[self.form.Box_Combo_Mid.currentIndex()]
+        self.form.Text_Mid_X.setText(str(point["position"]["X"]))
+        self.form.Text_Mid_Y.setText(str(point["position"]["Y"]))
+        self.form.Text_Mid_Z.setText(str(point["position"]["Z"]))
+        self.form.Text_Mid_Yaw.setText(str(point["orientation"]["yaw"]))
+        self.form.Text_Mid_Pitch.setText(str(point["orientation"]["pitch"]))
+        self.form.Text_Mid_Roll.setText(str(point["orientation"]["roll"]))
+    def updateEnd(self):
+        point = RPWlib.PointsList.List[self.form.Box_Combo_End.currentIndex()]
+        self.form.Text_End_Y.setText(str(point["position"]["Y"]))
+        self.form.Text_End_X.setText(str(point["position"]["X"]))
+        self.form.Text_End_Z.setText(str(point["position"]["Z"]))
+        self.form.Text_End_Yaw.setText(str(point["orientation"]["yaw"]))
+        self.form.Text_End_Pitch.setText(str(point["orientation"]["pitch"]))
+        self.form.Text_End_Roll.setText(str(point["orientation"]["roll"]))
+
 
     def accept(self):
-        startPoint = [self.form.Box_Start_X.value(), self.form.Box_Start_Y.value(), self.form.Box_Start_Z.value()]
-        midPoint = [self.form.Box_Mid_X.value(), self.form.Box_Mid_Y.value(), self.form.Box_Mid_Z.value()]
-        endPoint = [self.form.Box_End_X.value(), self.form.Box_End_Y.value(), self.form.Box_End_Z.value()]
-        mid = App.Vector(midPoint[0],midPoint[1],midPoint[2])
-        start = App.Vector(startPoint[0], startPoint[1], startPoint[2])
-        end   = App.Vector(endPoint[0], endPoint[1], endPoint[2])
-        vec1 = start - mid
-        vec2 = end - mid
-        norm = vec1.cross(vec2)
-        angle = vec1.getAngle(vec2)
-        angleDeg = angle*180/3.14159
-        rad = vec1.Length
-        App.Console.PrintMessage("\nAngle: {}\nLength: {}\nNorm: {}".format(angle, rad, norm))
-        arc = Part.Arc(start,mid,end)
-        myLine = arc.toShape()
-        shape=App.ActiveDocument.addObject("Part::Feature")
-        shape.Shape=myLine
-        App.ActiveDocument.recompute()
-        shape.ViewObject.LineColor=(1.0,0.0,0.0)
-        RPWlib.MovementList.List.append(Movements.CircularMovement(id= RPWlib.MovementList.currentId,sPoint=startPoint, mPoint=midPoint,ePoint= endPoint).__dict__)
         RPWlib.MovementList.currentId = RPWlib.MovementList.currentId +1
-       
+        startPoint =RPWlib.PointsList.List[self.form.Box_Combo_Start.currentIndex()]
+        midPoint = RPWlib.PointsList.List[self.form.Box_Combo_Mid.currentIndex()]
+        endPoint = RPWlib.PointsList.List[self.form.Box_Combo_End.currentIndex()]
+        start = App.Vector(startPoint["position"]["X"], startPoint["position"]["Y"], startPoint["position"]["Z"])
+        mid = App.Vector(midPoint["position"]["X"], midPoint["position"]["Y"], midPoint["position"]["Z"])
+        end   = App.Vector(endPoint["position"]["X"], endPoint["position"]["Y"], endPoint["position"]["Z"])
+        label = self.form.Box_Seg_Note.toPlainText()
+        Movements.CircularMovement.draw(start,mid, end)
+        RPWlib.MovementList.List.append(Movements.CircularMovement(sPoint=startPoint,mPoint=midPoint, ePoint= endPoint, label=label).__dict__)
+        RPWlib.MovementList.currentId = RPWlib.MovementList.currentId + 1
         with open(RPWlib.MovementList.pathToFile, 'w') as outfile:
             json.dump(RPWlib.MovementList.List, outfile, indent=4)
-
+        return True
 
     def updateStartPos(self):
         sel = Gui.Selection.getSelection()   

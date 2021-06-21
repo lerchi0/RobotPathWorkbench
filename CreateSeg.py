@@ -15,7 +15,7 @@ class CreateLinSegCmd():
     """My new command"""
         
     def GetResources(self):
-        return {'Pixmap'  : RPWlib.pathOfModule() + "/icons/WB_linSegCMD_2_icon.svg", # the name of a svg file available in the resources
+        return {'Pixmap'  : RPWlib.pathOfModule() + "/icons/WB_linSeg_icon.svg", # the name of a svg file available in the resources
                 'Accel' : "Alt+L", # a default shortcut (optional)
                 'MenuText': "Create a Linear Segment between two points",
                 'ToolTip' : "Generate a new linear Segment"}
@@ -36,7 +36,7 @@ class CreateP2PSegCmd():
     """My new command"""
         
     def GetResources(self):
-        return {'Pixmap'  : RPWlib.pathOfModule() + "/icons/WB_linSegCMD_2_icon.svg", # the name of a svg file available in the resources
+        return {'Pixmap'  : RPWlib.pathOfModule() + "/icons/WB_P2PSeg_icon.svg", # the name of a svg file available in the resources
                 'Accel' : "Alt+P", # a default shortcut (optional)
                 'MenuText': "Create a P2P Segment between two points",
                 'ToolTip' : "Generate a new P2P Segment"}
@@ -57,7 +57,7 @@ class CreateCircSegCmd():
     """My new command"""
         
     def GetResources(self):
-        return {'Pixmap'  : RPWlib.pathOfModule() + "/icons/WB_linSegCMD_2_icon.svg", # the name of a svg file available in the resources
+        return {'Pixmap'  : RPWlib.pathOfModule() + "/icons/WB_circSeg_icon.svg", # the name of a svg file available in the resources
                 'Accel' : "Alt+C", # a default shortcut (optional)
                 'MenuText': "Create a Circular Segment between two points",
                 'ToolTip' : "Generate a new Circular Segment"}

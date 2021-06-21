@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>426</width>
-    <height>338</height>
+    <width>478</width>
+    <height>809</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,45 +17,450 @@
    <set>Qt::ImhDigitsOnly</set>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="13" column="1">
-    <widget class="QLabel" name="label_10">
+   <item row="4" column="0">
+    <widget class="QTextEdit" name="Box_Seg_Note"/>
+   </item>
+   <item row="10" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,0,1">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Endpoint</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="Box_Combo_End">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_17">
+         <item>
+          <widget class="QLabel" name="label_35">
+           <property name="text">
+            <string>X:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_End_X">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_21">
+         <item>
+          <widget class="QLabel" name="label_36">
+           <property name="text">
+            <string>Y:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_End_Y">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_20">
+         <item>
+          <widget class="QLabel" name="label_37">
+           <property name="text">
+            <string>Z:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_End_Z">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_19">
+         <item>
+          <widget class="QLabel" name="label_38">
+           <property name="text">
+            <string>Yaw:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_End_Yaw">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_18">
+         <item>
+          <widget class="QLabel" name="label_39">
+           <property name="text">
+            <string>Pitch:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_End_Pitch">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_16">
+         <item>
+          <widget class="QLabel" name="label_40">
+           <property name="text">
+            <string>Roll:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_End_Roll">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item row="8" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,0,1">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Midpoint</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="Box_Combo_Mid">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QLabel" name="label_29">
+           <property name="text">
+            <string>X:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_Mid_X">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_15">
+         <item>
+          <widget class="QLabel" name="label_30">
+           <property name="text">
+            <string>Y:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_Mid_Y">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_14">
+         <item>
+          <widget class="QLabel" name="label_31">
+           <property name="text">
+            <string>Z:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_Mid_Z">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_13">
+         <item>
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>Yaw:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_Mid_Yaw">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_12">
+         <item>
+          <widget class="QLabel" name="label_33">
+           <property name="text">
+            <string>Pitch:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_Mid_Pitch">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <item>
+          <widget class="QLabel" name="label_34">
+           <property name="text">
+            <string>Roll:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_Mid_Roll">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>10</width>
+       <height>30</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Startpoint</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="Box_Combo_Start">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="label_23">
+           <property name="text">
+            <string>X:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_Start_X">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <widget class="QLabel" name="label_24">
+           <property name="text">
+            <string>Y:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_Start_Y">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="label_25">
+           <property name="text">
+            <string>Z:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_Start_Z">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="label_26">
+           <property name="text">
+            <string>Yaw:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_Start_Yaw">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_27">
+           <property name="text">
+            <string>Pitch:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_Start_Pitch">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_28">
+           <property name="text">
+            <string>Roll:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="Text_Start_Roll">
+           <property name="text">
+            <string>##</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>X:</string>
+      <string>Note:</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="1">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Y:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="15" column="2">
-    <widget class="QDoubleSpinBox" name="Box_End_Z"/>
-   </item>
-   <item row="5" column="3">
-    <widget class="QPushButton" name="buttonSetStart">
-     <property name="text">
-      <string>set Startpoint</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="3">
-    <widget class="QPushButton" name="buttonSetEnd">
-     <property name="text">
-      <string>set Endpoint</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="3">
-    <widget class="QPushButton" name="buttonSetMid">
-     <property name="text">
-      <string>set Midpoint</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="4">
+   <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="label">
      <property name="font">
       <font>
@@ -73,117 +478,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="2">
-    <widget class="QDoubleSpinBox" name="Box_Start_Z"/>
-   </item>
-   <item row="5" column="2">
-    <widget class="QDoubleSpinBox" name="Box_Start_Y"/>
-   </item>
-   <item row="4" column="1">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>X:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="15" column="1">
-    <widget class="QLabel" name="label_12">
-     <property name="text">
-      <string>Z:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="0">
-    <widget class="QLabel" name="label_13">
-     <property name="text">
-      <string>Endpoint</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="1">
-    <widget class="QLabel" name="label_11">
-     <property name="text">
-      <string>Y:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="1">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>X:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="2">
-    <widget class="QDoubleSpinBox" name="Box_Mid_Z"/>
-   </item>
-   <item row="13" column="2">
-    <widget class="QDoubleSpinBox" name="Box_End_X"/>
-   </item>
-   <item row="7" column="1">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>Z:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="2">
-    <widget class="QDoubleSpinBox" name="Box_End_Y"/>
-   </item>
-   <item row="5" column="1">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Y:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Startpoint</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
-    <widget class="QDoubleSpinBox" name="Box_Start_X"/>
-   </item>
-   <item row="9" column="2">
-    <widget class="QDoubleSpinBox" name="Box_Mid_X"/>
-   </item>
-   <item row="10" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Midpoint</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="2">
-    <widget class="QDoubleSpinBox" name="Box_Mid_Y"/>
-   </item>
-   <item row="11" column="1">
-    <widget class="QLabel" name="label_9">
-     <property name="text">
-      <string>Z:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <spacer name="verticalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>10</width>
-       <height>30</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="12" column="2">
+   <item row="9" column="0" colspan="2">
     <spacer name="verticalSpacer_3">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -199,8 +494,8 @@
      </property>
     </spacer>
    </item>
-   <item row="3" column="1">
-    <spacer name="verticalSpacer">
+   <item row="7" column="0" colspan="2">
+    <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -215,22 +510,21 @@
      </property>
     </spacer>
    </item>
+   <item row="2" column="0">
+    <spacer name="verticalSpacer_4">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
- <tabstops>
-  <tabstop>Box_Start_X</tabstop>
-  <tabstop>Box_Start_Y</tabstop>
-  <tabstop>Box_Start_Z</tabstop>
-  <tabstop>Box_Mid_X</tabstop>
-  <tabstop>Box_Mid_Y</tabstop>
-  <tabstop>Box_Mid_Z</tabstop>
-  <tabstop>Box_End_X</tabstop>
-  <tabstop>Box_End_Y</tabstop>
-  <tabstop>Box_End_Z</tabstop>
-  <tabstop>buttonSetStart</tabstop>
-  <tabstop>buttonSetMid</tabstop>
-  <tabstop>buttonSetEnd</tabstop>
- </tabstops>
  <resources/>
  <connections/>
 </ui>

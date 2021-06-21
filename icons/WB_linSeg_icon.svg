@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="32"
+   height="32"
+   viewBox="0 0 8.4666665 8.4666669"
+   version="1.1"
+   id="svg1485"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   sodipodi:docname="WB_linSeg_icon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1487"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     inkscape:zoom="12.6875"
+     inkscape:cx="24.078818"
+     inkscape:cy="19.901478"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1482">
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect11901"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect9330"
+       is_visible="true"
+       lpeversion="1"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+  </defs>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <ellipse
+       style="fill:#0000ff;stroke:#000000;stroke-width:0.264583"
+       id="path9291"
+       cx="1.2199507"
+       cy="7.205008"
+       rx="0.3857964"
+       ry="0.34408867" />
+    <ellipse
+       style="fill:#0000ff;stroke:#000000;stroke-width:0.264583"
+       id="path9293"
+       cx="7.1215925"
+       cy="1.1261083"
+       rx="0.34408867"
+       ry="0.33366174" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 1.2303777,7.1945811 c 0,0 5.880788,-6.1101804 5.880788,-6.1101804"
+       id="path9328"
+       inkscape:path-effect="#path-effect9330"
+       inkscape:original-d="M 1.2303777,7.1945811 7.1111657,1.0844007" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:2.45703px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0614258"
+       x="2.5599847"
+       y="8.7359037"
+       id="text10544"
+       transform="scale(1.0578553,0.9453089)"><tspan
+         sodipodi:role="line"
+         id="tspan10542"
+         style="stroke-width:0.0614258"
+         x="2.5599847"
+         y="8.7359037">A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:2.35915px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.058979"
+       x="3.937674"
+       y="2.1836627"
+       id="text11784"
+       transform="scale(1.0684966,0.93589437)"><tspan
+         sodipodi:role="line"
+         id="tspan11782"
+         style="stroke-width:0.058979"
+         x="3.937674"
+         y="2.1836627">B</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 2.6067323,4.3584563 c 0,0 1.480624,-0.2502461 1.480624,-0.2502461 0,0 0.041708,1.3972085 0.041708,1.3972085"
+       id="path11899"
+       inkscape:path-effect="#path-effect11901"
+       inkscape:original-d="M 2.6067323,4.3584563 4.0873563,4.1082102 4.129064,5.5054187" />
+  </g>
+</svg>

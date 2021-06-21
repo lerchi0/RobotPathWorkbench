@@ -1,51 +1,88 @@
 import numpy as np
 import json
 import RPWClasses
-
+import Part
+import FreeCAD as App
+import RPWlib
+import math
 class Movement(object):
-    def __init__(self, type):
+    def __init__(self, type,speed,label):
         self.type = type
-        
+        self.speed = speed
+        self.label = label
+    def draw():
+        raise NotImplementedError()
 
 class LinearMovement(Movement):
-    def __init__(self,sPoint, ePoint, speed = 50):
-        super().__init__("Linear")
-        self.startPoint = RPWClasses.Pathpoint(position = sPoint).__dict__
-        self.endPoint = RPWClasses.Pathpoint(position = ePoint).__dict__
-        self.speed = speed
+    def __init__(self,sPoint, ePoint, speed = 50, label = ""):
+        super().__init__("Linear", speed,label)
+        self.startPoint = sPoint
+        self.endPoint = ePoint
+    @staticmethod
+    def draw(start, end):
+        
+        myLine = Part.makeLine(start, end)
+        name = "Pathsegment_{}_linear".format(RPWlib.MovementList.currentId)
+        try:
+            App.ActiveDocument.removeObject(name)
+        except:
+            pass
+        shape=App.ActiveDocument.addObject("Part::Feature", name)
+        shape.Shape=myLine
+        App.ActiveDocument.recompute()
+        shape.ViewObject.LineColor=(1.0,0.0,1.0)
+        
+        RPWlib.MovementList.pathGrp.addObject(App.ActiveDocument.getObject(name))
+        
 
 class P2PMovement(Movement):
-    def __init__(self,sPoint, ePoint, speed = 50):
-        super().__init__("P2P")
+    def __init__(self,sPoint, ePoint, speed = 50, label = ""):
+        super().__init__("P2P", speed, label)
         self.startPoint = {}
         self.endPoint = {}
 
-        self.startPoint["X"] = sPoint[0]
-        self.startPoint["Y"] = sPoint[1]
-        self.startPoint["Z"] = sPoint[2]
-        self.endPoint["X"] = ePoint[0]
-        self.endPoint["Y"] = ePoint[1]
-        self.endPoint["Z"] = ePoint[2]
-        self.speed = speed
+        self.startPoint = sPoint
+        self.endPoint = ePoint
+
+    @staticmethod
+    def draw(start, end):
+        myLine = Part.makeLine(start, end)
+        name = "Pathsegment_{}_P2P".format(RPWlib.MovementList.currentId)
+        try:
+            App.ActiveDocument.removeObject(name)
+        except:
+            pass
+        shape=App.ActiveDocument.addObject("Part::Feature", name)
+        shape.Shape=myLine
+        App.ActiveDocument.recompute()
+        shape.ViewObject.LineColor=(0.0,0.0,1.0)
+        RPWlib.MovementList.pathGrp.addObject(App.ActiveDocument.getObject(name))
 
 class CircularMovement(Movement):
-    def __init__(self,sPoint,mPoint, ePoint, speed = 50):
-        super().__init__("Circular")
+    def __init__(self,sPoint,mPoint, ePoint, speed = 50, label = ""):
+        super().__init__("Circular",speed, label)
         self.startPoint = {}
         self.midPoint = {}
         self.endPoint = {}
         
-        self.startPoint["X"] = sPoint[0]
-        self.startPoint["Y"] = sPoint[1]
-        self.startPoint["Z"] = sPoint[2]
-        self.midPoint["X"] = mPoint[0]
-        self.midPoint["Y"] = mPoint[1]
-        self.midPoint["Z"] = mPoint[2]
-        self.endPoint["X"] = ePoint[0]
-        self.endPoint["Y"] = ePoint[1]
-        self.endPoint["Z"] = ePoint[2]
-        self.speed = speed
-
+        self.startPoint = sPoint
+        self.midPoint = mPoint
+        self.endPoint = ePoint
+    @staticmethod
+    def draw(start, mid ,end):
+        arc = Part.Arc(start,mid,end)
+        name = "Pathsegment_{}_circular".format(RPWlib.MovementList.currentId)
+        try:
+            App.ActiveDocument.removeObject(name)
+        except:
+            pass
+        myLine = arc.toShape()
+        shape=App.ActiveDocument.addObject("Part::Feature", name)
+        shape.Shape=myLine
+        App.ActiveDocument.recompute()
+        shape.ViewObject.LineColor=(1.0,0.0,0.0)
+        
+        RPWlib.MovementList.pathGrp.addObject(App.ActiveDocument.getObject(name))
 
 if __name__ == "__main__":
     lst = []
