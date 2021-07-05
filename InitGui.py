@@ -2,8 +2,7 @@ import FreeCADGui as Gui
 import FreeCAD as App
 
 
-class RobotPathWorkbench(Workbench):
-
+class RobotPathWorkbench(Gui.Workbench):
     def __init__(self):
         import RPWlib
         self.__class__.MenuText = "Robot Path Workbench"
@@ -12,15 +11,17 @@ class RobotPathWorkbench(Workbench):
 
     def Initialize(self):
         """This function is executed when FreeCAD starts"""
-        import CreateSeg
-        import AddOrigin
-        import AddPoints
+        import CreateSeg, AddOrigin, AddPoints, NewModule, ShowPath
         self.segmentCommands = ["Create_Linear_Segment","Create_P2P_Segment","Create_Circular_Segment"] # A list of command names created in the line above
         self.mainCommands = ["Add_Origin_Command", "Add_Points_Command"]
-
+        self.advancedCommands = ["Add_New_Module_Command"]
+        self.RPWMenu = ["Edit_Path_Command"]
         self.appendToolbar("Main Commands",self.mainCommands)
-        self.appendToolbar("Add Segment",self.segmentCommands) # creates a new toolbar with your commands
+        self.appendToolbar("Add Segment",self.segmentCommands) 
+        self.appendToolbar("Advanced Commands",self.advancedCommands) # creates a new toolbar with your commands
         
+        
+    
         
     def Activated(self):
         import RPWClasses
@@ -44,20 +45,27 @@ class RobotPathWorkbench(Workbench):
         except Exception as e:
             App.Console.PrintError(e)
         """This function is executed when the workbench is activated"""
+        try:
+            RPWlib.mainCMDs = mw.findChild(QtGui.QToolBar, "Main Commands")
+            RPWlib.addSegCMDs = mw.findChild(QtGui.QToolBar, "Add Segment")
+            RPWlib.newModCMDs = mw.findChild(QtGui.QToolBar, "Advanced Commands")
+            RPWlib.mainCMDs.show()
+            RPWlib.addSegCMDs.show()
+            RPWlib.newModCMDs.show()
+        except Exception as e:
+            App.Console.PrintError(e)
         return
 
     def Deactivated(self):
         """This function is executed when the workbench is deactivated"""
         return
 
-    def ContextMenu(self, recipient):
-        """This is executed whenever the user right-clicks on screen"""
-        # "recipient" will be either "view" or "tree"
-        #  # add commands to the context menu
+    def ContextMenu(self,recipient):
+        self.appendContextMenu(["RPW Commands", "Path"],self.RPWMenu)
 
     def GetClassName(self): 
         # This function is mandatory if this is a full python workbench
         # This is not a template, the returned string should be exactly "Gui::PythonWorkbench"
         return "Gui::PythonWorkbench"
 
-Gui.addWorkbench(RobotPathWorkbench())
+Gui.addWorkbench(RobotPathWorkbench)

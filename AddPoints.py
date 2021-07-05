@@ -9,7 +9,7 @@ import os
 import RPWlib
 import RPWClasses
 import json
-
+import getpass
 path_to_ui = RPWlib.pathOfModule() + "/pointsView.ui"
 
 
@@ -43,6 +43,7 @@ class AddPoints():
         self.form.listWidget.clear()
         for idx, val in enumerate(RPWlib.PointsList.List):
             self.form.listWidget.addItem(str(idx))
+            
     def printItem(self,item):
         self.current = self.form.listWidget.currentRow()
         point = RPWlib.PointsList.List[self.form.listWidget.currentRow()]
@@ -55,6 +56,7 @@ class AddPoints():
         self.form.Box_Point_Yaw.setValue(point["offsetRot"]["yaw"])
         self.form.Box_Point_Pitch.setValue(point["offsetRot"]["pitch"])
         self.form.Box_Point_Roll.setValue(point["offsetRot"]["roll"])
+        
 
     def drawSphere(self, pos, ori):
         RPWClasses.Pathpoint.draw("Point_{}".format(self.current),2,pos, ori)
@@ -67,6 +69,7 @@ class AddPoints():
         item = self.form.listWidget.item(len(RPWlib.PointsList.List)-1)
         self.form.listWidget.setCurrentRow(len(RPWlib.PointsList.List)-1)
         self.printItem(item)
+        self.updateSphere()
 
     def deletePoint(self):
         doc = App.activeDocument()
@@ -78,26 +81,28 @@ class AddPoints():
             App.Console.PrintMessage("\r\n")
         App.Console.PrintMessage("Successfully deleted Point {}\r\n".format(deletedPoint))
         self.reloadList()
-        item = self.form.listWidget.item(len(RPWlib.PointsList.List)-1)
-        self.form.listWidget.setCurrentRow(len(RPWlib.PointsList.List)-1)
-        self.printItem(item)
+        if (len(RPWlib.PointsList.List) != 0):
+            item = self.form.listWidget.item(len(RPWlib.PointsList.List)-1)
+            self.form.listWidget.setCurrentRow(len(RPWlib.PointsList.List)-1)
+            self.printItem(item)
 
     def savePoint(self):
-        idxCS = self.form.Box_Combo_CS.currentIndex()
-        cs = RPWlib.CSList.List[idxCS]
-        RPWlib.PointsList.List[self.current]["offsetPos"]["X"] = self.form.Box_Point_X.value()
-        RPWlib.PointsList.List[self.current]["position"]["X"] = cs["position"]["X"] + self.form.Box_Point_X.value()
-        RPWlib.PointsList.List[self.current]["offsetPos"]["Y"] = self.form.Box_Point_Y.value()
-        RPWlib.PointsList.List[self.current]["position"]["Y"] = cs["position"]["Y"] + self.form.Box_Point_Y.value()
-        RPWlib.PointsList.List[self.current]["offsetPos"]["Z"] = self.form.Box_Point_Z.value()
-        RPWlib.PointsList.List[self.current]["position"]["Z"] = cs["position"]["Z"] + self.form.Box_Point_Z.value()
-        RPWlib.PointsList.List[self.current]["offsetRot"]["yaw"] = self.form.Box_Point_Yaw.value()
-        RPWlib.PointsList.List[self.current]["orientation"]["yaw"] = cs["orientation"]["yaw"] + self.form.Box_Point_Yaw.value()
-        RPWlib.PointsList.List[self.current]["offsetRot"]["pitch"] = self.form.Box_Point_Pitch.value()
-        RPWlib.PointsList.List[self.current]["orientation"]["pitch"] = cs["orientation"]["pitch"] + self.form.Box_Point_Pitch.value()
-        RPWlib.PointsList.List[self.current]["offsetRot"]["roll"] = self.form.Box_Point_Roll.value()
-        RPWlib.PointsList.List[self.current]["orientation"]["roll"] = cs["orientation"]["roll"] + self.form.Box_Point_Roll.value()
-        RPWlib.PointsList.List[self.current]["coordinateSystem"] = cs
+        if (len(RPWlib.PointsList.List) != 0):
+            idxCS = self.form.Box_Combo_CS.currentIndex()
+            cs = RPWlib.CSList.List[idxCS]
+            RPWlib.PointsList.List[self.current]["offsetPos"]["X"] = self.form.Box_Point_X.value()
+            RPWlib.PointsList.List[self.current]["position"]["X"] = cs["position"]["X"] + self.form.Box_Point_X.value()
+            RPWlib.PointsList.List[self.current]["offsetPos"]["Y"] = self.form.Box_Point_Y.value()
+            RPWlib.PointsList.List[self.current]["position"]["Y"] = cs["position"]["Y"] + self.form.Box_Point_Y.value()
+            RPWlib.PointsList.List[self.current]["offsetPos"]["Z"] = self.form.Box_Point_Z.value()
+            RPWlib.PointsList.List[self.current]["position"]["Z"] = cs["position"]["Z"] + self.form.Box_Point_Z.value()
+            RPWlib.PointsList.List[self.current]["offsetRot"]["yaw"] = self.form.Box_Point_Yaw.value()
+            RPWlib.PointsList.List[self.current]["orientation"]["yaw"] = cs["orientation"]["yaw"] + self.form.Box_Point_Yaw.value()
+            RPWlib.PointsList.List[self.current]["offsetRot"]["pitch"] = self.form.Box_Point_Pitch.value()
+            RPWlib.PointsList.List[self.current]["orientation"]["pitch"] = cs["orientation"]["pitch"] + self.form.Box_Point_Pitch.value()
+            RPWlib.PointsList.List[self.current]["offsetRot"]["roll"] = self.form.Box_Point_Roll.value()
+            RPWlib.PointsList.List[self.current]["orientation"]["roll"] = cs["orientation"]["roll"] + self.form.Box_Point_Roll.value()
+            RPWlib.PointsList.List[self.current]["coordinateSystem"] = cs
         self.reloadList()
 
     def updateSphere(self):
@@ -111,9 +116,17 @@ class AddPoints():
         _ori = App.Rotation(ori[0] +oriCS[0],ori[1]+oriCS[1], ori[2]+oriCS[2])
         _posCS = App.Vector(posCS[0], posCS[1], posCS[2])
         _oriCS = App.Rotation(oriCS[0],oriCS[1], oriCS[2])
-        self.drawSphere(_pos, _ori)
-        Gui.Selection.clearSelection()
-        Gui.Selection.addSelection(App.ActiveDocument.Name,"Point_{}".format(self.current))
+        if (len(RPWlib.PointsList.List) != 0):
+            try:
+                if self.current >= 0:
+                    App.ActiveDocument.removeObject("Point_{}".format(self.current))
+                    
+            except: 
+                pass
+            self.drawSphere(_pos, _ori)
+            Gui.Selection.clearSelection()
+            Gui.Selection.addSelection(App.ActiveDocument.Name,"Point_{}".format(self.current))
+
 
     def setPos(self):
         sel = Gui.Selection.getSelection()   
@@ -136,29 +149,16 @@ class AddPoints():
         if (element_.ShapeType == "Vertex"):
             pos = element_.Point
             ori = [0,0,0]
-            App.Console.PrintMessage("x = {}\r\n".format(pos[0]))
-            App.Console.PrintMessage("y = {}\r\n".format(pos[1]))
-            App.Console.PrintMessage("z = {}\r\n".format(pos[2]))
-            App.Console.PrintMessage("\r\n")
         elif (element_.ShapeType == "Face"):
             pos = element_.BoundBox.Center
             normalVect = element_.normalAt(0,0)
             ori = [0,0,0]
-            App.Console.PrintMessage("x = {}\r\n".format(pos[0]))
-            App.Console.PrintMessage("y = {}\r\n".format(pos[1]))
-            App.Console.PrintMessage("z = {}\r\n".format(pos[2]))
-            App.Console.PrintMessage("normal Vector = {}\r\n".format(normalVect))
-            App.Console.PrintMessage("\r\n")
         elif (element_.ShapeType == "Edge"):
             startPoint = element_.Vertexes[0]
             endPoint = element_.Vertexes[1]
             direction = endPoint.Point - startPoint.Point
             pos = startPoint.Point + 0.5*direction
             ori = [0,0,0]
-            App.Console.PrintMessage("start = {}\r\n".format(startPoint.Point))
-            App.Console.PrintMessage("end = {}\r\n".format(endPoint.Point))
-            App.Console.PrintMessage("center = {}\r\n".format(pos))
-            App.Console.PrintMessage("direction = {}\r\n".format(direction))
         idxCS = self.form.Box_Combo_CS.currentIndex()
         posCS = [RPWlib.CSList.List[idxCS]["position"]["X"],RPWlib.CSList.List[idxCS]["position"]["Y"],RPWlib.CSList.List[idxCS]["position"]["Z"]]
         oriCS = [RPWlib.CSList.List[idxCS]["orientation"]["yaw"],RPWlib.CSList.List[idxCS]["orientation"]["pitch"],RPWlib.CSList.List[idxCS]["orientation"]["roll"]]
@@ -172,14 +172,11 @@ class AddPoints():
         self.updateSphere()
 
     def accept(self):
+        if (len(RPWlib.PointsList.List) != 0):
+            self.savePoint()
         doc = App.activeDocument()
-        with open(RPWlib.PointsList.pathToFile, 'w') as outfile:
-            json.dump(RPWlib.PointsList.List, outfile, indent=4)
-        try:
-            doc.removeObject("Shape")
-        except:
-            App.Console.PrintMessage("no Center-Sphere found")
-            App.Console.PrintMessage("\r\n")
+        user = getpass.getuser()
+        RPWlib.writePointsFile(RPWlib.PointsList.List, user)
         return True
 
 

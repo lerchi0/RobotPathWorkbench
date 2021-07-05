@@ -5,6 +5,7 @@ import os
 import RPWlib
 import Movements
 import json
+import getpass
 path_to_ui = RPWlib.pathOfModule() + "/createP2PSegDialog.ui"
 
 class CreateP2PSeg():
@@ -37,17 +38,28 @@ class CreateP2PSeg():
         self.form.Text_End_Roll.setText(str(point["orientation"]["roll"]))
 
     def accept(self):
-        RPWlib.MovementList.currentId = RPWlib.MovementList.currentId +1
+        name = self.form.Box_Seg_Name.text()
         startPoint =RPWlib.PointsList.List[self.form.Box_Combo_Start.currentIndex()]
         endPoint = RPWlib.PointsList.List[self.form.Box_Combo_End.currentIndex()]
         start = App.Vector(startPoint["position"]["X"], startPoint["position"]["Y"], startPoint["position"]["Z"])
         end   = App.Vector(endPoint["position"]["X"], endPoint["position"]["Y"], endPoint["position"]["Z"])
         label = self.form.Box_Seg_Note.toPlainText()
-        Movements.P2PMovement.draw(start, end)
-        RPWlib.MovementList.List.append(Movements.P2PMovement(sPoint=startPoint, ePoint= endPoint,label= label).__dict__)
+        Movements.P2PMovement.draw(start, end,name)
+        sPoint = {
+            "position" : startPoint["position"],
+            "orientation" : startPoint["orientation"],
+            "coordinateSystem" : startPoint["coordinateSystem"]["id"],
+        }
+        
+        ePoint = {
+            "position" : endPoint["position"],
+            "orientation" : endPoint["orientation"],
+            "coordinateSystem" : endPoint["coordinateSystem"]["id"],
+        }
+        RPWlib.MovementList.List.append(Movements.P2PMovement(sPoint=sPoint, ePoint= ePoint,name=name, label= label).__dict__)
         RPWlib.MovementList.currentId = RPWlib.MovementList.currentId + 1
-        with open(RPWlib.MovementList.pathToFile, 'w') as outfile:
-            json.dump(RPWlib.MovementList.List, outfile, indent=4)
+        user = getpass.getuser()
+        RPWlib.writeMovementsFile(RPWlib.MovementList.List, user )
         return True
 
     def updateStartPos(self):

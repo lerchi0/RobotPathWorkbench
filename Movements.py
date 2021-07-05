@@ -6,23 +6,24 @@ import FreeCAD as App
 import RPWlib
 import math
 class Movement(object):
-    def __init__(self, type,speed,label):
+    def __init__(self, type,speed,name,label):
         self.type = type
         self.speed = speed
+        self.name = name
         self.label = label
+        
     def draw():
         raise NotImplementedError()
 
 class LinearMovement(Movement):
-    def __init__(self,sPoint, ePoint, speed = 50, label = ""):
-        super().__init__("Linear", speed,label)
+    def __init__(self,sPoint, ePoint, speed = 50,name = "", label = ""):
+        super().__init__("Linear", speed,name,label)
         self.startPoint = sPoint
         self.endPoint = ePoint
     @staticmethod
-    def draw(start, end):
+    def draw(start, end, name):
         
         myLine = Part.makeLine(start, end)
-        name = "Pathsegment_{}_linear".format(RPWlib.MovementList.currentId)
         try:
             App.ActiveDocument.removeObject(name)
         except:
@@ -36,8 +37,8 @@ class LinearMovement(Movement):
         
 
 class P2PMovement(Movement):
-    def __init__(self,sPoint, ePoint, speed = 50, label = ""):
-        super().__init__("P2P", speed, label)
+    def __init__(self,sPoint, ePoint, speed = 50,name = "" ,label = ""):
+        super().__init__("P2P", speed,name, label)
         self.startPoint = {}
         self.endPoint = {}
 
@@ -45,9 +46,8 @@ class P2PMovement(Movement):
         self.endPoint = ePoint
 
     @staticmethod
-    def draw(start, end):
+    def draw(start, end, name):
         myLine = Part.makeLine(start, end)
-        name = "Pathsegment_{}_P2P".format(RPWlib.MovementList.currentId)
         try:
             App.ActiveDocument.removeObject(name)
         except:
@@ -59,19 +59,17 @@ class P2PMovement(Movement):
         RPWlib.MovementList.pathGrp.addObject(App.ActiveDocument.getObject(name))
 
 class CircularMovement(Movement):
-    def __init__(self,sPoint,mPoint, ePoint, speed = 50, label = ""):
-        super().__init__("Circular",speed, label)
+    def __init__(self,sPoint,mPoint, ePoint, speed = 50,name = "", label = ""):
+        super().__init__("Circular",speed,name, label)
         self.startPoint = {}
         self.midPoint = {}
         self.endPoint = {}
-        
         self.startPoint = sPoint
         self.midPoint = mPoint
         self.endPoint = ePoint
     @staticmethod
-    def draw(start, mid ,end):
+    def draw(start, mid ,end, name):
         arc = Part.Arc(start,mid,end)
-        name = "Pathsegment_{}_circular".format(RPWlib.MovementList.currentId)
         try:
             App.ActiveDocument.removeObject(name)
         except:

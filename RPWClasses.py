@@ -37,18 +37,16 @@ class Pathpoint:
             doc.removeObject(name)
         except:
             pass
-        try:
-            doc.removeObject("Shape")
-        except:
-            pass
-        #s = Part.makeSphere(RPWlib.sphereSize,pos)
-        #Part.show(s)
         lcs = App.activeDocument().addObject('PartDesign::CoordinateSystem',name)
         lcs.Placement = App.Placement(pos,ori)
-        if _type == 1:
-            RPWlib.CSList.csGrp.addObject(App.ActiveDocument.getObject(name))
-        elif _type == 2:
-            RPWlib.PointsList.pointsGrp.addObject(App.ActiveDocument.getObject(name))
+        try:
+            if _type == 1:
+                RPWlib.CSList.csGrp.addObject(App.ActiveDocument.getObject(name))
+            elif _type == 2:
+                RPWlib.PointsList.pointsGrp.addObject(App.ActiveDocument.getObject(name))
+        except Exception as e:
+            App.Console.PrintMessage(e)
+
 
 class CoordinateSystem (Pathpoint):
     def __init__(self,coordSystem, offsetPos, offsetRot, csId ,name = ""):

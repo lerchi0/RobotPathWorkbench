@@ -5,6 +5,7 @@ import os
 import RPWlib
 import Movements
 import json
+import getpass
 path_to_ui = RPWlib.pathOfModule() + "/createCircSegDialog.ui"
 
 
@@ -51,7 +52,7 @@ class CreateCircSeg():
 
 
     def accept(self):
-        RPWlib.MovementList.currentId = RPWlib.MovementList.currentId +1
+        name = self.form.Box_Seg_Name.text()
         startPoint =RPWlib.PointsList.List[self.form.Box_Combo_Start.currentIndex()]
         midPoint = RPWlib.PointsList.List[self.form.Box_Combo_Mid.currentIndex()]
         endPoint = RPWlib.PointsList.List[self.form.Box_Combo_End.currentIndex()]
@@ -59,11 +60,27 @@ class CreateCircSeg():
         mid = App.Vector(midPoint["position"]["X"], midPoint["position"]["Y"], midPoint["position"]["Z"])
         end   = App.Vector(endPoint["position"]["X"], endPoint["position"]["Y"], endPoint["position"]["Z"])
         label = self.form.Box_Seg_Note.toPlainText()
-        Movements.CircularMovement.draw(start,mid, end)
-        RPWlib.MovementList.List.append(Movements.CircularMovement(sPoint=startPoint,mPoint=midPoint, ePoint= endPoint, label=label).__dict__)
+        Movements.CircularMovement.draw(start,mid, end,name)
+        sPoint = {
+            "position" : startPoint["position"],
+            "orientation" : startPoint["orientation"],
+            "coordinateSystem" : startPoint["coordinateSystem"]["id"],
+        }
+        mPoint = {
+            "position" : midPoint["position"],
+            "orientation" : midPoint["orientation"],
+            "coordinateSystem" : midPoint["coordinateSystem"]["id"],
+        }
+        ePoint = {
+            "position" : endPoint["position"],
+            "orientation" : endPoint["orientation"],
+            "coordinateSystem" : endPoint["coordinateSystem"]["id"],
+        }
+        
+        RPWlib.MovementList.List.append(Movements.CircularMovement(sPoint=sPoint,mPoint=mPoint, ePoint= ePoint,name=name, label=label).__dict__)
         RPWlib.MovementList.currentId = RPWlib.MovementList.currentId + 1
-        with open(RPWlib.MovementList.pathToFile, 'w') as outfile:
-            json.dump(RPWlib.MovementList.List, outfile, indent=4)
+        user = getpass.getuser()
+        RPWlib.writeMovementsFile(RPWlib.MovementList.List, user )
         return True
 
     def updateStartPos(self):

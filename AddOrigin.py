@@ -148,6 +148,7 @@ class AddOrigin():
         ori = [self.form.Box_CS_Yaw.value(),self.form.Box_CS_Pitch.value(),self.form.Box_CS_Roll.value()]
         _pos = App.Vector(pos[0]+posCS[0], pos[1]+posCS[1],pos[2] +posCS[2])
         _ori = App.Rotation(ori[0] +oriCS[0],ori[1]+oriCS[1], ori[2]+oriCS[2])
+        App.ActiveDocument.removeObject(RPWlib.CSList.List[self.current]["name"])
         self.drawLCS(_pos, _ori)
         Gui.Selection.clearSelection()
         Gui.Selection.addSelection(App.ActiveDocument.Name,RPWlib.CSList.List[self.current]["name"])
@@ -207,6 +208,7 @@ class AddOrigin():
 
 
     def accept(self):
+        self.saveCS()
         doc = App.activeDocument()
         with open(RPWlib.CSList.pathToFile, 'w') as outfile:
             json.dump(RPWlib.CSList.List, outfile, indent=4)
