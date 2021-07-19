@@ -1,17 +1,16 @@
 import FreeCADGui as Gui
 import FreeCAD as App
 
-
 class RobotPathWorkbench(Gui.Workbench):
     def __init__(self):
         import RPWlib
         self.__class__.MenuText = "Robot Path Workbench"
         self.__class__.ToolTip = "A Workbench to create and export Paths for Robots"
-        self.__class__.Icon = RPWlib.pathOfModule() + "/icons/WB_main_icon.svg"
+        self.__class__.Icon =  RPWlib.pathOfModule() + "/icons/WB_main_icon.svg"
 
     def Initialize(self):
         """This function is executed when FreeCAD starts"""
-        import CreateSeg, AddOrigin, AddPoints, NewModule, ShowPath
+        import CreateSeg, AddOrigin, AddPoints, NewModule, EditPath
         self.segmentCommands = ["Create_Linear_Segment","Create_P2P_Segment","Create_Circular_Segment"] # A list of command names created in the line above
         self.mainCommands = ["Add_Origin_Command", "Add_Points_Command"]
         self.advancedCommands = ["Add_New_Module_Command"]

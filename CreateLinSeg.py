@@ -18,47 +18,56 @@ class CreateLinSeg():
             self.form.Box_Combo_End.addItem("Point {}".format(idx))
         self.updateStart()
         self.updateEnd()
+        self.updateSpeed()
         self.form.Box_Combo_Start.currentIndexChanged.connect(lambda: self.updateStart())
         self.form.Box_Combo_End.currentIndexChanged.connect(lambda: self.updateEnd())
+        self.form.Slider_Seg_Speed.valueChanged.connect(lambda: self.updateSpeed())
+
+
+    def updateSpeed(self):
+        speed = self.form.Slider_Seg_Speed.value()
+        self.form.Disp_Seg_Speed.setText(f"{speed} %")
+
 
     def updateStart(self):
         point = RPWlib.PointsList.List[self.form.Box_Combo_Start.currentIndex()]
-        self.form.Text_Start_X.setText(str(point["position"]["X"]))
-        self.form.Text_Start_Y.setText(str(point["position"]["Y"]))
-        self.form.Text_Start_Z.setText(str(point["position"]["Z"]))
-        self.form.Text_Start_Yaw.setText(str(point["orientation"]["yaw"]))
-        self.form.Text_Start_Pitch.setText(str(point["orientation"]["pitch"]))
-        self.form.Text_Start_Roll.setText(str(point["orientation"]["roll"]))
+        self.form.Text_Start_X.setText(str(point.position["X"]))
+        self.form.Text_Start_Y.setText(str(point.position["Y"]))
+        self.form.Text_Start_Z.setText(str(point.position["Z"]))
+        self.form.Text_Start_Yaw.setText(str(point.orientation["yaw"]))
+        self.form.Text_Start_Pitch.setText(str(point.orientation["pitch"]))
+        self.form.Text_Start_Roll.setText(str(point.orientation["roll"]))
     def updateEnd(self):
         point = RPWlib.PointsList.List[self.form.Box_Combo_End.currentIndex()]
-        self.form.Text_End_Y.setText(str(point["position"]["Y"]))
-        self.form.Text_End_X.setText(str(point["position"]["X"]))
-        self.form.Text_End_Z.setText(str(point["position"]["Z"]))
-        self.form.Text_End_Yaw.setText(str(point["orientation"]["yaw"]))
-        self.form.Text_End_Pitch.setText(str(point["orientation"]["pitch"]))
-        self.form.Text_End_Roll.setText(str(point["orientation"]["roll"]))
+        self.form.Text_End_Y.setText(str(point.position["Y"]))
+        self.form.Text_End_X.setText(str(point.position["X"]))
+        self.form.Text_End_Z.setText(str(point.position["Z"]))
+        self.form.Text_End_Yaw.setText(str(point.orientation["yaw"]))
+        self.form.Text_End_Pitch.setText(str(point.orientation["pitch"]))
+        self.form.Text_End_Roll.setText(str(point.orientation["roll"]))
 
     def accept(self):
         name = self.form.Box_Seg_Name.text()
+        speed = self.form.Slider_Seg_Speed.value()
         startPoint =RPWlib.PointsList.List[self.form.Box_Combo_Start.currentIndex()]
         endPoint = RPWlib.PointsList.List[self.form.Box_Combo_End.currentIndex()]
-        start = App.Vector(startPoint["position"]["X"], startPoint["position"]["Y"], startPoint["position"]["Z"])
-        end   = App.Vector(endPoint["position"]["X"], endPoint["position"]["Y"], endPoint["position"]["Z"])
         label = self.form.Box_Seg_Note.toPlainText()
-        Movements.LinearMovement.draw(start, end,name)
+        Movements.LinearMovement.draw(startPoint, endPoint,name)
         sPoint = {
-            "position" : startPoint["position"],
-            "orientation" : startPoint["orientation"],
-            "coordinateSystem" : startPoint["coordinateSystem"]["id"],
+            "id": self.form.Box_Combo_Start.currentIndex(),
+            "position" : startPoint.position,
+            "orientation" : startPoint.orientation,
+            "coordinateSystem" : startPoint.coordinateSystem,
         }
         
         ePoint = {
-            "position" : endPoint["position"],
-            "orientation" : endPoint["orientation"],
-            "coordinateSystem" : endPoint["coordinateSystem"]["id"],
+            "id": self.form.Box_Combo_End.currentIndex(),
+            "position" : endPoint.position,
+            "orientation" : endPoint.orientation,
+            "coordinateSystem" : endPoint.coordinateSystem,
         }
         
-        RPWlib.MovementList.List.append(Movements.LinearMovement(sPoint=sPoint, ePoint= ePoint,name=name,label= label).__dict__)
+        RPWlib.MovementList.List.append(Movements.LinearMovement(sPoint=sPoint, ePoint= ePoint,name=name,label= label, speed=speed))
         RPWlib.MovementList.currentId = RPWlib.MovementList.currentId + 1
         user = getpass.getuser()
         RPWlib.writeMovementsFile(RPWlib.MovementList.List, user )

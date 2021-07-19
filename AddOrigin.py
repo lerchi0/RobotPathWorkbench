@@ -1,13 +1,11 @@
 import FreeCADGui as Gui
 import FreeCAD as App
-import Part
 from PySide2 import QtGui
 from PySide2 import QtCore
 from PySide2.QtUiTools import QUiLoader
-import os
 import RPWlib
 import RPWClasses
-import json
+import getpass
 path_to_ui = RPWlib.pathOfModule() + "/updateOrigin.ui"
 
 
@@ -37,43 +35,65 @@ class AddOrigin():
         
 
     def printItem(self,item):
+        self.form.Box_CS_X.blockSignals(True)
+        self.form.Box_CS_Y.blockSignals(True)
+        self.form.Box_CS_Z.blockSignals(True)
+        self.form.Box_CS_Yaw.blockSignals(True)
+        self.form.Box_CS_Pitch.blockSignals(True)
+        self.form.Box_CS_Roll.blockSignals(True)
+        self.form.Box_Combo_Parent.blockSignals(True)
         cs = RPWlib.CSList.List[self.form.listWidget.currentRow()]
-        self.current = cs["id"]
+        self.current = cs.id
         self.form.Box_Combo_Parent.clear()
         for idx, el in enumerate(RPWlib.CSList.List):
-            self.form.Box_Combo_Parent.addItem(el["name"])
-        if cs["coordinateSystem"] != None:
+            self.form.Box_Combo_Parent.addItem(el.name)
+        if cs.coordinateSystem != None:
             self.form.Box_Combo_Parent.setEnabled(False)
-            self.form.Box_Combo_Parent.setCurrentIndex(cs["coordinateSystem"]["id"])    
+            self.form.Box_Combo_Parent.setCurrentIndex(cs.coordinateSystem)    
         else:
             self.form.Box_Combo_Parent.setPlaceholderText("None")
             self.form.Box_Combo_Parent.setCurrentIndex(-1)
             self.form.Box_Combo_Parent.setEnabled(False)
-        self.form.Box_CS_ID.setText(str(cs["id"]))
-        self.form.Box_CS_Name.setText(cs["name"])
-        self.form.Box_CS_X.setValue(cs["offsetPos"]["X"])
-        self.form.Box_CS_Y.setValue(cs["offsetPos"]["Y"])
-        self.form.Box_CS_Z.setValue(cs["offsetPos"]["Z"])
-        self.form.Box_CS_Yaw.setValue(cs["offsetRot"]["yaw"])
-        self.form.Box_CS_Pitch.setValue(cs["offsetRot"]["pitch"])
-        self.form.Box_CS_Roll.setValue(cs["offsetRot"]["roll"])
-
+        self.form.Box_CS_ID.setText(str(cs.id))
+        self.form.Box_CS_Name.setText(cs.name)
+        self.form.Box_CS_X.setValue(cs.offsetPos["X"])
+        self.form.Box_CS_Y.setValue(cs.offsetPos["Y"])
+        self.form.Box_CS_Z.setValue(cs.offsetPos["Z"])
+        self.form.Box_CS_Yaw.setValue(cs.offsetRot["yaw"])
+        self.form.Box_CS_Pitch.setValue(cs.offsetRot["pitch"])
+        self.form.Box_CS_Roll.setValue(cs.offsetRot["roll"])
+        Gui.Selection.clearSelection()
+        Gui.Selection.addSelection(App.ActiveDocument.Name,RPWlib.CSList.List[self.current].name)
+        self.form.Box_CS_X.blockSignals(False)
+        self.form.Box_CS_Y.blockSignals(False)
+        self.form.Box_CS_Z.blockSignals(False)
+        self.form.Box_CS_Yaw.blockSignals(False)
+        self.form.Box_CS_Pitch.blockSignals(False)
+        self.form.Box_CS_Roll.blockSignals(False)
+        self.form.Box_Combo_Parent.blockSignals(False)
+        self.updateLCS()
+        
     def reloadList(self):
         self.form.listWidget.clear()
         for idx, el in enumerate(RPWlib.CSList.List):
-            self.form.listWidget.addItem(el["name"])
+            self.form.listWidget.addItem(el.name)
 
-    def drawLCS(self, pos, ori):
-        RPWClasses.Pathpoint.draw(RPWlib.CSList.List[self.current]["name"],1,pos,ori)
+    def drawLCS(self, trafo):
+        cs = RPWlib.CSList.List[self.current]
+        if cs.id == 0:
+            RPWClasses.Pathpoint.draw(cs.name,1,trafo, True)
+            
+        else:
+            RPWClasses.Pathpoint.draw(cs.name,1,trafo)
 
     def addCS(self):
         App.Console.PrintMessage("adding new CS")
         App.Console.PrintMessage("\r\n")
-        parent = RPWlib.CSList.List[0]
+        parent = RPWlib.CSList.List[0].id
         _pos ={"X":0,"Y":0,"Z":0}
         _ori =  {"yaw":0,"pitch":0,"roll":0}
-        cs = RPWClasses.CoordinateSystem(coordSystem= parent, csId= len(RPWlib.CSList.List),offsetPos= _pos, offsetRot= _ori)
-        RPWlib.CSList.List.append(cs.__dict__)
+        cs = RPWClasses.CoordinateSystem(coordSystem= parent , csId= len(RPWlib.CSList.List),offsetPos= _pos, offsetRot= _ori)
+        RPWlib.CSList.List.append(cs)
         
         self.reloadList()
         item = self.form.listWidget.item(len(RPWlib.CSList.List)-1)
@@ -96,7 +116,6 @@ class AddOrigin():
 
 
     def saveCS(self):
-        
         self.form.Box_Combo_Parent.setEnabled(True)
         idxCS = self.form.Box_Combo_Parent.currentIndex()
         self.form.Box_Combo_Parent.setEnabled(False)
@@ -104,54 +123,38 @@ class AddOrigin():
             cs = RPWlib.CSList.List[idxCS]
         else:
             cs = None
-        RPWlib.CSList.List[self.current]["name"] = self.form.Box_CS_Name.text()
+        RPWlib.CSList.List[self.current].name = self.form.Box_CS_Name.text()
         if cs != None:
-            RPWlib.CSList.List[self.current]["position"]["X"] = cs["position"]["X"] + self.form.Box_CS_X.value()
-            RPWlib.CSList.List[self.current]["position"]["Y"] = cs["position"]["Y"] + self.form.Box_CS_Y.value()
-            RPWlib.CSList.List[self.current]["position"]["Z"] = cs["position"]["Z"] + self.form.Box_CS_Z.value()
-            RPWlib.CSList.List[self.current]["orientation"]["yaw"] = cs["orientation"]["yaw"] + self.form.Box_CS_Yaw.value()
-            RPWlib.CSList.List[self.current]["orientation"]["pitch"] = cs["orientation"]["pitch"] + self.form.Box_CS_Pitch.value()
-            RPWlib.CSList.List[self.current]["orientation"]["roll"] = cs["orientation"]["roll"] + self.form.Box_CS_Roll.value()
+            RPWlib.CSList.List[self.current].position["X"] = cs.position["X"] + self.form.Box_CS_X.value()
+            RPWlib.CSList.List[self.current].position["Y"] = cs.position["Y"] + self.form.Box_CS_Y.value()
+            RPWlib.CSList.List[self.current].position["Z"] = cs.position["Z"] + self.form.Box_CS_Z.value()
+            RPWlib.CSList.List[self.current].orientation["yaw"] = cs.orientation["yaw"] + self.form.Box_CS_Yaw.value()
+            RPWlib.CSList.List[self.current].orientation["pitch"] = cs.orientation["pitch"] + self.form.Box_CS_Pitch.value()
+            RPWlib.CSList.List[self.current].orientation["roll"] = cs.orientation["roll"] + self.form.Box_CS_Roll.value()
+            RPWlib.CSList.List[self.current].coordinateSystem = cs.id
         else:
-            RPWlib.CSList.List[self.current]["position"]["X"] = self.form.Box_CS_X.value()
-            RPWlib.CSList.List[self.current]["position"]["Y"] = self.form.Box_CS_Y.value()
-            RPWlib.CSList.List[self.current]["position"]["Z"] = self.form.Box_CS_Z.value()
-            RPWlib.CSList.List[self.current]["orientation"]["yaw"] = self.form.Box_CS_Yaw.value()
-            RPWlib.CSList.List[self.current]["orientation"]["pitch"] = self.form.Box_CS_Pitch.value()
-            RPWlib.CSList.List[self.current]["orientation"]["roll"] = self.form.Box_CS_Roll.value()
-        RPWlib.CSList.List[self.current]["offsetPos"]["X"] = self.form.Box_CS_X.value()
-        RPWlib.CSList.List[self.current]["offsetPos"]["Y"] = self.form.Box_CS_Y.value()
-        RPWlib.CSList.List[self.current]["offsetPos"]["Z"] = self.form.Box_CS_Z.value()
-        RPWlib.CSList.List[self.current]["offsetRot"]["yaw"] = self.form.Box_CS_Yaw.value()
-        RPWlib.CSList.List[self.current]["offsetRot"]["pitch"] = self.form.Box_CS_Pitch.value()
-        RPWlib.CSList.List[self.current]["offsetRot"]["roll"] = self.form.Box_CS_Roll.value()
-
-
-        RPWlib.CSList.List[self.current]["coordinateSystem"] = cs
+            RPWlib.CSList.List[self.current].position["X"] = self.form.Box_CS_X.value()
+            RPWlib.CSList.List[self.current].position["Y"] = self.form.Box_CS_Y.value()
+            RPWlib.CSList.List[self.current].position["Z"] = self.form.Box_CS_Z.value()
+            RPWlib.CSList.List[self.current].orientation["yaw"] = self.form.Box_CS_Yaw.value()
+            RPWlib.CSList.List[self.current].orientation["pitch"] = self.form.Box_CS_Pitch.value()
+            RPWlib.CSList.List[self.current].orientation["roll"] = self.form.Box_CS_Roll.value()
+            RPWlib.CSList.List[self.current].coordinateSystem = cs
+        RPWlib.CSList.List[self.current].offsetPos["X"] = self.form.Box_CS_X.value()
+        RPWlib.CSList.List[self.current].offsetPos["Y"] = self.form.Box_CS_Y.value()
+        RPWlib.CSList.List[self.current].offsetPos["Z"] = self.form.Box_CS_Z.value()
+        RPWlib.CSList.List[self.current].offsetRot["yaw"] = self.form.Box_CS_Yaw.value()
+        RPWlib.CSList.List[self.current].offsetRot["pitch"] = self.form.Box_CS_Pitch.value()
+        RPWlib.CSList.List[self.current].offsetRot["roll"] = self.form.Box_CS_Roll.value()
+        
         self.reloadList()
 
     def updateLCS(self):
-        self.form.Box_Combo_Parent.setEnabled(True)
-        idxCS = self.form.Box_Combo_Parent.currentIndex()
-        self.form.Box_Combo_Parent.setEnabled(False)
-        if idxCS >= 0:
-            cs = RPWlib.CSList.List[idxCS]
-        else:
-            cs = None
-        if cs != None:    
-            posCS = [RPWlib.CSList.List[idxCS]["position"]["X"],RPWlib.CSList.List[idxCS]["position"]["Y"],RPWlib.CSList.List[idxCS]["position"]["Z"]]
-            oriCS = [RPWlib.CSList.List[idxCS]["orientation"]["yaw"],RPWlib.CSList.List[idxCS]["orientation"]["pitch"],RPWlib.CSList.List[idxCS]["orientation"]["roll"]]
-        else:
-            posCS = [0,0,0]
-            oriCS = [0,0,0]
-        pos = [self.form.Box_CS_X.value(), self.form.Box_CS_Y.value(),self.form.Box_CS_Z.value()]
-        ori = [self.form.Box_CS_Yaw.value(),self.form.Box_CS_Pitch.value(),self.form.Box_CS_Roll.value()]
-        _pos = App.Vector(pos[0]+posCS[0], pos[1]+posCS[1],pos[2] +posCS[2])
-        _ori = App.Rotation(ori[0] +oriCS[0],ori[1]+oriCS[1], ori[2]+oriCS[2])
-        App.ActiveDocument.removeObject(RPWlib.CSList.List[self.current]["name"])
-        self.drawLCS(_pos, _ori)
+        self.saveCS()        
+        trafo = RPWlib.CSList.List[self.current].getTotalTransform()
+        self.drawLCS(trafo)
         Gui.Selection.clearSelection()
-        Gui.Selection.addSelection(App.ActiveDocument.Name,RPWlib.CSList.List[self.current]["name"])
+        Gui.Selection.addSelection(App.ActiveDocument.Name,RPWlib.CSList.List[self.current].name)
 
     def setPos(self):
         sel = Gui.Selection.getSelection()   
@@ -209,14 +212,8 @@ class AddOrigin():
 
     def accept(self):
         self.saveCS()
-        doc = App.activeDocument()
-        with open(RPWlib.CSList.pathToFile, 'w') as outfile:
-            json.dump(RPWlib.CSList.List, outfile, indent=4)
-        try:
-            doc.removeObject("Shape")
-        except:
-            App.Console.PrintMessage("no Center-Sphere found")
-            App.Console.PrintMessage("\r\n")
+        user = getpass.getuser()
+        RPWlib.writeCSFile(RPWlib.CSList.List, user)
         return True
 
     def updateOriginPos(self):
