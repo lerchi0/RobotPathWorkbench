@@ -23,7 +23,8 @@ class EditPath():
         self.form.Combo_Box_Start.currentIndexChanged.connect(lambda: self.saveCurrentMovement())
         self.form.Combo_Box_Mid.currentIndexChanged.connect(lambda: self.saveCurrentMovement())
         self.form.Combo_Box_End.currentIndexChanged.connect(lambda: self.saveCurrentMovement())
-        self.form.listWidget.currentRowChanged.connect(lambda: self.dropEvent())
+        self.form.Btn_Move_Up.clicked.connect(lambda: self.moveItemUp())
+        self.form.Btn_Move_Down.clicked.connect(lambda: self.moveItemDown())
 
     def highlightSegment(self,item):
         self.form.Combo_Box_Start.blockSignals(True)
@@ -33,7 +34,6 @@ class EditPath():
             self.current = self.form.listWidget.currentRow()
             self.currentName = item.text()
             movement = RPWlib.MovementList.List[self.current]
-            App.Console.PrintMessage("Index: {}; Item: {}\r\n".format(self.current, self.currentName))
         except Exception as e:
             App.Console.PrintMessage(e)
         self.form.Box_Seg_Name.setText(movement.name)
@@ -53,6 +53,14 @@ class EditPath():
         self.form.Combo_Box_Mid.blockSignals(False)
         self.form.Combo_Box_End.blockSignals(False)
 
+    def moveItemUp(self):
+        self.current = self.form.listWidget.currentRow()
+        currentMovement = RPWlib.MovementList.List[self.current]
+        ## Btn enable check 
+        if self.newID == 0:
+            self.form.Btn_Move_Up.setEnabled(False)
+    def moveItemDown(self):
+        pass
 
     def accept(self):
         newList = self.saveMovements()
@@ -66,8 +74,11 @@ class EditPath():
     def dropEvent(self):
         App.Console.PrintMessage("Dropped")
         newList = self.saveMovements()
+        App.Console.PrintMessage("sorted")
         RPWlib.MovementList.List = newList
+        App.Console.PrintMessage("saved")
         self.highlightSegment(self.form.listWidget.currentItem())
+
     def saveCurrentMovement(self):
         idx = self.form.listWidget.currentRow()
         startPoint = RPWlib.PointsList.List[self.form.Combo_Box_Start.currentIndex()]
@@ -121,7 +132,9 @@ class EditPath():
             curSegName = curSeg.text()
             for i,j in enumerate(RPWlib.MovementList.List):
                 if j.name == curSegName:
+                    j.id = idx
                     TempList.append(j)
+                    App.Console.PrintMessage("ID: {}, Name: {}\r\n".format(j.id, j.name))
         return TempList
 
 

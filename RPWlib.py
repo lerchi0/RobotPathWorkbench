@@ -32,22 +32,22 @@ def reloadMovementList():
     App.Console.PrintMessage("\r\n")
     if data:
         App.Console.PrintMessage("\r\nMovements-file last edited on {} by {}".format(data["lastEditedOn"], data["lastEditor"]))
+        curID = 0
         for movement in data["Movements"]:
-            
             if movement["type"] == "Linear":
                 start = movement["startPoint"]
                 end = movement["endPoint"]
                 speed = movement["speed"]
                 label = movement["label"]
                 name = movement["name"]
-                MovementList.List.append(Movements.LinearMovement(sPoint = start, ePoint= end, speed= speed,name=name, label=label))
+                MovementList.List.append(Movements.LinearMovement(id = curID,sPoint = start, ePoint= end, speed= speed,name=name, label=label))
             if movement["type"] == "P2P":
                 start = movement["startPoint"]
                 end = movement["endPoint"]
                 speed = movement["speed"]
                 label = movement["label"]
                 name = movement["name"]
-                MovementList.List.append(Movements.P2PMovement(sPoint = start, ePoint= end, speed= speed,name=name, label=label))
+                MovementList.List.append(Movements.P2PMovement(id = curID,sPoint = start, ePoint= end, speed= speed,name=name, label=label))
             if movement["type"] == "Circular":
                 start = movement["startPoint"]
                 mid = movement["midPoint"]
@@ -55,7 +55,8 @@ def reloadMovementList():
                 speed = movement["speed"]
                 label = movement["label"]
                 name = movement["name"]
-                MovementList.List.append(Movements.CircularMovement(sPoint = start,mPoint=mid, ePoint= end, speed= speed,name=name, label=label))
+                MovementList.List.append(Movements.CircularMovement(id = curID,sPoint = start,mPoint=mid, ePoint= end, speed= speed,name=name, label=label))
+            curID = curID +1
     else:
         MovementList.List = []
     curID = 0

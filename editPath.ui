@@ -107,6 +107,20 @@
      </item>
     </layout>
    </item>
+   <item row="8" column="1">
+    <widget class="QPushButton" name="Btn_Move_Up">
+     <property name="text">
+      <string>Move Item Up</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1">
+    <widget class="QPushButton" name="Btn_Move_Down">
+     <property name="text">
+      <string>Move Item Down</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>

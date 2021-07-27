@@ -6,11 +6,12 @@ import RPWlib
 import math
 
 class Movement(object):
-    def __init__(self, type,speed,name,label):
+    def __init__(self,id, type,speed,name,label):
         self.type = type
         self.speed = speed
         self.name = name
         self.label = label
+        self.id = id
     def selfdraw():
         raise NotImplementedError()   
     def draw():
@@ -19,8 +20,8 @@ class Movement(object):
 
 
 class LinearMovement(Movement):
-    def __init__(self,sPoint, ePoint, speed = 50,name = "", label = ""):
-        super().__init__("Linear", speed,name,label)
+    def __init__(self,id, sPoint, ePoint, speed = 50,name = "", label = ""):
+        super().__init__(id,"Linear", speed,name,label)
         self.startPoint = sPoint
         self.endPoint = ePoint
 
@@ -61,8 +62,8 @@ class LinearMovement(Movement):
         
 
 class P2PMovement(Movement):
-    def __init__(self,sPoint, ePoint, speed = 50,name = "" ,label = ""):
-        super().__init__("P2P", speed,name, label)
+    def __init__(self,id,sPoint, ePoint, speed = 50,name = "" ,label = ""):
+        super().__init__(id,"P2P", speed,name, label)
         self.startPoint = {}
         self.endPoint = {}
 
@@ -106,8 +107,8 @@ class P2PMovement(Movement):
         RPWlib.MovementList.pathGrp.addObject(App.ActiveDocument.getObject(name))
 
 class CircularMovement(Movement):
-    def __init__(self,sPoint,mPoint, ePoint, speed = 50,name = "", label = ""):
-        super().__init__("Circular",speed,name, label)
+    def __init__(self,id,sPoint,mPoint, ePoint, speed = 50,name = "", label = ""):
+        super().__init__(id,"Circular",speed,name, label)
         self.startPoint = {}
         self.midPoint = {}
         self.endPoint = {}
