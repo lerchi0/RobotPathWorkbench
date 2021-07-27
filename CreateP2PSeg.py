@@ -54,12 +54,12 @@ class CreateP2PSeg():
         }
         
         ePoint = {
-            "id": self.form.Box_Combo_Mid.currentIndex(),
+            "id": self.form.Box_Combo_End.currentIndex(),
             "position" : endPoint.position,
             "orientation" : endPoint.orientation,
             "coordinateSystem" : endPoint.coordinateSystem,
         }
-        RPWlib.MovementList.List.append(Movements.P2PMovement(sPoint=sPoint, ePoint= ePoint,name=name, label= label, speed=speed))
+        RPWlib.MovementList.List.append(Movements.P2PMovement(id = RPWlib.MovementList.currentId,sPoint=sPoint, ePoint= ePoint,name=name, label= label, speed=speed))
         RPWlib.MovementList.currentId = RPWlib.MovementList.currentId + 1
         user = getpass.getuser()
         RPWlib.writeMovementsFile(RPWlib.MovementList.List, user )

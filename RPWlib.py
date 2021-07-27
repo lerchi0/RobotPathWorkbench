@@ -169,6 +169,7 @@ def getMovementDict(movements):
                 "speed": movement.speed,
                 "label": movement.label,
                 "name": movement.name,
+                "id" : movement.id,
                 "startPoint": {
                     "id":movement.startPoint["id"],
                     "position": movement.startPoint["position"],
@@ -196,6 +197,7 @@ def getMovementDict(movements):
                 "speed": movement.speed,
                 "label": movement.label,
                 "name": movement.name,
+                "id" : movement.id,
                 "startPoint": {
                     "id":movement.startPoint["id"],
                     "position": movement.startPoint["position"],

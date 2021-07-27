@@ -12,9 +12,9 @@ class Movement(object):
         self.name = name
         self.label = label
         self.id = id
-    def selfdraw():
+    def selfdraw(self):
         raise NotImplementedError()   
-    def draw():
+    def draw(self):
         raise NotImplementedError()
     
 
@@ -50,9 +50,10 @@ class LinearMovement(Movement):
         end = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(endPoint)).Base
         try:
             App.ActiveDocument.removeObject(name)
-            myLine = Part.makeLine(start, end)
+            
         except:
             pass
+        myLine = Part.makeLine(start, end)
         shape=App.ActiveDocument.addObject("Part::Feature", name)
         shape.Shape=myLine
         App.ActiveDocument.recompute()

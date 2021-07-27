@@ -67,7 +67,7 @@ class CreateLinSeg():
             "coordinateSystem" : endPoint.coordinateSystem,
         }
         
-        RPWlib.MovementList.List.append(Movements.LinearMovement(sPoint=sPoint, ePoint= ePoint,name=name,label= label, speed=speed))
+        RPWlib.MovementList.List.append(Movements.LinearMovement(id = RPWlib.MovementList.currentId,sPoint=sPoint, ePoint= ePoint,name=name,label= label, speed=speed))
         RPWlib.MovementList.currentId = RPWlib.MovementList.currentId + 1
         user = getpass.getuser()
         RPWlib.writeMovementsFile(RPWlib.MovementList.List, user )

@@ -19,6 +19,11 @@ class EditPath():
             self.form.Combo_Box_Start.addItem("Point_{}".format(idx))
             self.form.Combo_Box_Mid.addItem("Point_{}".format(idx))
             self.form.Combo_Box_End.addItem("Point_{}".format(idx))
+        self.current = 0
+        item = self.form.listWidget.item(0)
+        self.form.listWidget.setCurrentRow(0)
+        if (len(RPWlib.MovementList.List) != 0):
+            self.highlightSegment(item)
         self.form.listWidget.itemPressed.connect(self.highlightSegment)
         self.form.Combo_Box_Start.currentIndexChanged.connect(lambda: self.saveCurrentMovement())
         self.form.Combo_Box_Mid.currentIndexChanged.connect(lambda: self.saveCurrentMovement())
@@ -39,6 +44,12 @@ class EditPath():
         self.form.Box_Seg_Name.setText(movement.name)
         self.form.Combo_Box_Start.setCurrentIndex(movement.startPoint["id"])
         self.form.Combo_Box_End.setCurrentIndex(movement.endPoint["id"])
+        self.form.Btn_Move_Up.setEnabled(True)
+        self.form.Btn_Move_Down.setEnabled(True)
+        if movement.id == 0:
+            self.form.Btn_Move_Up.setEnabled(False)
+        elif movement.id == len(RPWlib.MovementList.List)-1:
+            self.form.Btn_Move_Down.setEnabled(False)
 
         if movement.type == "Circular":
             self.form.Combo_Box_Mid.setEnabled(True)
@@ -55,12 +66,40 @@ class EditPath():
 
     def moveItemUp(self):
         self.current = self.form.listWidget.currentRow()
+        newPos = self.current -1
         currentMovement = RPWlib.MovementList.List[self.current]
-        ## Btn enable check 
-        if self.newID == 0:
-            self.form.Btn_Move_Up.setEnabled(False)
+        otherMovement = RPWlib.MovementList.List[newPos]
+        currentMovement.id = newPos
+        otherMovement.id = self.current
+        RPWlib.MovementList.List[self.current] = otherMovement
+        RPWlib.MovementList.List[newPos] = currentMovement
+        self.reloadList()
+        self.form.listWidget.setCurrentRow(newPos)
+        self.current = newPos
+        self.highlightSegment(item=self.form.listWidget.item(newPos))
+        
+
     def moveItemDown(self):
-        pass
+        self.current = self.form.listWidget.currentRow()
+        newPos = self.current +1
+        currentMovement = RPWlib.MovementList.List[self.current]
+        otherMovement = RPWlib.MovementList.List[newPos]
+        currentMovement.id = newPos
+        otherMovement.id = self.current
+        RPWlib.MovementList.List[self.current] = otherMovement
+        RPWlib.MovementList.List[newPos] = currentMovement
+        self.reloadList()
+        self.form.listWidget.setCurrentRow(newPos)
+        self.current = newPos
+        self.highlightSegment(item=self.form.listWidget.item(newPos))
+
+
+    def reloadList(self):
+        self.form.listWidget.clear()
+        for idx, val in enumerate(RPWlib.MovementList.List):
+            self.form.listWidget.addItem(val.name)
+        self.form.listWidget.setCurrentRow(self.current)
+
 
     def accept(self):
         newList = self.saveMovements()
@@ -105,19 +144,19 @@ class EditPath():
                 "orientation" : midPoint.orientation,
                 "coordinateSystem" : midPoint.coordinateSystem,
             }
-            RPWlib.MovementList.List[idx] = Movements.CircularMovement(sPoint,mPoint,ePoint,
+            RPWlib.MovementList.List[idx] = Movements.CircularMovement(idx,sPoint,mPoint,ePoint,
                     RPWlib.MovementList.List[idx].speed,
                     RPWlib.MovementList.List[idx].name,
                     RPWlib.MovementList.List[idx].label)
             RPWlib.MovementList.List[idx].selfdraw()
         elif RPWlib.MovementList.List[idx].type == "P2P":
-            RPWlib.MovementList.List[idx] = Movements.P2PMovement(sPoint,ePoint,
+            RPWlib.MovementList.List[idx] = Movements.P2PMovement(idx,sPoint,ePoint,
                     RPWlib.MovementList.List[idx].speed,
                     RPWlib.MovementList.List[idx].name,
                     RPWlib.MovementList.List[idx].label)
             RPWlib.MovementList.List[idx].selfdraw()
         elif RPWlib.MovementList.List[idx].type == "Linear":
-            RPWlib.MovementList.List[idx] = Movements.LinearMovement(sPoint,ePoint,
+            RPWlib.MovementList.List[idx] = Movements.LinearMovement(idx,sPoint,ePoint,
                     RPWlib.MovementList.List[idx].speed,
                     RPWlib.MovementList.List[idx].name,
                     RPWlib.MovementList.List[idx].label)

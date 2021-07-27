@@ -82,7 +82,7 @@ class CreateCircSeg():
             "coordinateSystem" : endPoint.coordinateSystem,
         }
         
-        RPWlib.MovementList.List.append(Movements.CircularMovement(sPoint=sPoint,mPoint=mPoint, ePoint= ePoint,name=name, label=label,speed=speed))
+        RPWlib.MovementList.List.append(Movements.CircularMovement(id = RPWlib.MovementList.currentId,sPoint=sPoint,mPoint=mPoint, ePoint= ePoint,name=name, label=label,speed=speed))
         RPWlib.MovementList.currentId = RPWlib.MovementList.currentId + 1
         user = getpass.getuser()
         RPWlib.writeMovementsFile(RPWlib.MovementList.List, user )
