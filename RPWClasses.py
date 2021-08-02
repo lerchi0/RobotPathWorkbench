@@ -1,3 +1,26 @@
+#***************************************************************************
+#*                                                                         *
+#*   Copyright (c) 2021 Lerchbaumer Thomas                                 *
+#*                                                                         *
+#*                                                                         *
+#*   This program is free software; you can redistribute it and/or modify  *
+#*   it under the terms of the GNU Lesser General Public License (LGPL)    *
+#*   as published by the Free Software Foundation; either version 3 of     *
+#*   the License, or (at your option) any later version.                   *
+#*   for detail see the LICENCE text file.                                 *
+#*                                                                         *
+#*   This program is distributed in the hope that it will be useful,       *
+#*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+#*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+#*   GNU Lesser General Public License for more details.                   *
+#*                                                                         *
+#*   You should have received a copy of the GNU Lesser General Public      *
+#*   License along with this program; if not, write to the Free Software   *
+#*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
+#*   USA                                                                   *
+#*                                                                         *
+#***************************************************************************
+
 import datetime
 import PySide2
 import json
@@ -81,7 +104,7 @@ class Pathpoint:
         try:
             doc.removeObject(name)
         except Exception as e:
-            App.Console.PrintError("{}\r\n{}".format(e, name))
+            pass
 
         lcs = doc.addObject('PartDesign::CoordinateSystem',name)
         if not isBase:
@@ -158,15 +181,6 @@ class ProjectConfiguration:
             
         except:
             pass
-
-        
-        try:
-            fullpath = doc.FileName
-            index = fullpath.rfind("/")
-            path = fullpath[:index+1]
-        except:
-            path = RPWlib.pathOfModule()
-
         try:
             RPWlib.MovementList.pathGrp = doc.addObject("App::DocumentObjectGroup", "Path")
             RPWlib.PointsList.pointsGrp = doc.addObject("App::DocumentObjectGroup", "Points")
@@ -174,7 +188,12 @@ class ProjectConfiguration:
         except Exception as e:
             App.Console.PrintMessage(e)
         user = getpass.getuser()
-
+        try:
+            fullpath = doc.FileName
+            index = fullpath.rfind("/")
+            path = fullpath[:index+1]
+        except:
+            path = RPWlib.pathOfModule()
         
         # Load defined Coordinate Systems
         if self.configData["PathToCoordinateSystems"] == None or self.configData["PathToCoordinateSystems"] == "":
@@ -208,4 +227,5 @@ class ProjectConfiguration:
         with open(self.configFile, 'w') as fp:
             self.configData["EditedOn"] = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
             json.dump(self.configData, fp, indent=4)
-       
+
+

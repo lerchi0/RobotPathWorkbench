@@ -23,54 +23,54 @@
 
 import FreeCADGui as Gui
 import FreeCAD as App
-import Part
-from PySide2 import QtGui
-from PySide import QtGui as QGui 
-from PySide2 import QtCore
-from PySide2.QtUiTools import QUiLoader
 import RPWlib
-
-
-path_to_ui = RPWlib.pathOfModule() + "/newModul.ui"
-class AddModule():
-    
-    # Ablauf:
-    #           - sollen bestehende geladen werden?
-    #           - Ursprungs KS wählen
-    #           - Punkte definieren
-    #           - Pfade definieren
-    #           - abspeichern für mehrmalige Verwendung 
-
-
-
-    def __init__(self):
-        self.form = Gui.PySideUic.loadUi(path_to_ui)
-
-    def accept(self):
-        return True
-
-
-class AddModuleCmd():
+import RPWClasses
+class ReloadViewCmd():
     """My new command"""
         
     def GetResources(self):
         return {'Pixmap'  : RPWlib.pathOfModule() + "/icons/WB_newModule_icon.svg", # the name of a svg file available in the resources
-                'Accel' : "", # a default shortcut (optional)
-                'MenuText': "Add Standard Module to the Model",
-                'ToolTip' : "Add Module"}
+                #'Accel' : "Shift+R", # a default shortcut (optional)
+                'MenuText': "Reload 3D View",
+                'ToolTip' : "Reload 3D View"}
 
     def Activated(self):
-        panelMod = AddModule()
-        Gui.Control.showDialog(panelMod)
+        try:
+            doc = App.ActiveDocument
+            path = doc.getObject("Path")
+            pts = doc.getObject("Points")
+            cs = doc.getObject("Coordinate_Systems")
+            RPWClasses.delWithChildren(path)
+            RPWClasses.delWithChildren(pts)
+            RPWClasses.delWithChildren(cs)
+        except:
+            pass
+        try:
+            RPWlib.MovementList.pathGrp = doc.addObject("App::DocumentObjectGroup", "Path")
+            RPWlib.PointsList.pointsGrp = doc.addObject("App::DocumentObjectGroup", "Points")
+            RPWlib.CSList.csGrp = doc.addObject("App::DocumentObjectGroup", "Coordinate_Systems")
+        except Exception as e:
+            App.Console.PrintMessage(e)
+
+        try:
+            for cs in RPWlib.CSList.List:
+                trafo = cs.getTotalTransform()
+                if cs.id == 0:
+                    RPWClasses.Pathpoint.draw(cs.name,1,trafo, True)
+                else:
+                    RPWClasses.Pathpoint.draw(cs.name,1,trafo)
+            for id,pt in enumerate(RPWlib.PointsList.List):
+                trafo = pt.getTotalTransform()
+                RPWClasses.Pathpoint.draw("Point_{}".format(id),2,trafo)
+            for mv in RPWlib.MovementList.List:
+                mv.selfdraw()
+        except Exception as e:
+            App.Console.PrintMessage(e)  
         return True
 
     def IsActive(self):
         """Here you can define if the command must be active or not (greyed) if certain conditions
         are met or not. This function is optional."""
         return True
-    def Deactivated(self):
-        pass
 
-
-
-Gui.addCommand('Add_New_Module_Command',AddModuleCmd())
+Gui.addCommand('Reload_View_Command',ReloadViewCmd())

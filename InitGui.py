@@ -1,3 +1,27 @@
+#***************************************************************************
+#*                                                                         *
+#*   Copyright (c) 2021 Lerchbaumer Thomas                                 *
+#*                                                                         *
+#*                                                                         *
+#*   This program is free software; you can redistribute it and/or modify  *
+#*   it under the terms of the GNU Lesser General Public License (LGPL)    *
+#*   as published by the Free Software Foundation; either version 3 of     *
+#*   the License, or (at your option) any later version.                   *
+#*   for detail see the LICENCE text file.                                 *
+#*                                                                         *
+#*   This program is distributed in the hope that it will be useful,       *
+#*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+#*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+#*   GNU Lesser General Public License for more details.                   *
+#*                                                                         *
+#*   You should have received a copy of the GNU Lesser General Public      *
+#*   License along with this program; if not, write to the Free Software   *
+#*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
+#*   USA                                                                   *
+#*                                                                         *
+#***************************************************************************
+
+
 import FreeCADGui as Gui
 import FreeCAD as App
 
@@ -10,11 +34,12 @@ class RobotPathWorkbench(Gui.Workbench):
 
     def Initialize(self):
         """This function is executed when FreeCAD starts"""
-        import CreateSeg, AddOrigin, AddPoints, NewModule, EditPath
+        import CreateSeg, AddOrigin, AddPoints, NewModule, EditPath, ReloadView
         self.segmentCommands = ["Create_Linear_Segment","Create_P2P_Segment","Create_Circular_Segment"] # A list of command names created in the line above
         self.mainCommands = ["Add_Origin_Command", "Add_Points_Command"]
         self.advancedCommands = ["Add_New_Module_Command"]
-        self.RPWMenu = ["Edit_Path_Command"]
+        self.RPWMenuPath = ["Edit_Path_Command"]
+        self.RPWMenu = ["Reload_View_Command"]
         self.appendToolbar("Main Commands",self.mainCommands)
         self.appendToolbar("Add Segment",self.segmentCommands) 
         self.appendToolbar("Advanced Commands",self.advancedCommands) # creates a new toolbar with your commands
@@ -60,7 +85,8 @@ class RobotPathWorkbench(Gui.Workbench):
         return
 
     def ContextMenu(self,recipient):
-        self.appendContextMenu(["RPW Commands", "Path"],self.RPWMenu)
+        self.appendContextMenu(["RPW Workbench", "Path"],self.RPWMenuPath)
+        self.appendContextMenu(["RPW Workbench"], self.RPWMenu)
 
     def GetClassName(self): 
         # This function is mandatory if this is a full python workbench

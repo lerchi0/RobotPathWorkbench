@@ -1,9 +1,34 @@
+#***************************************************************************
+#*                                                                         *
+#*   Copyright (c) 2021 Lerchbaumer Thomas                                 *
+#*                                                                         *
+#*                                                                         *
+#*   This program is free software; you can redistribute it and/or modify  *
+#*   it under the terms of the GNU Lesser General Public License (LGPL)    *
+#*   as published by the Free Software Foundation; either version 3 of     *
+#*   the License, or (at your option) any later version.                   *
+#*   for detail see the LICENCE text file.                                 *
+#*                                                                         *
+#*   This program is distributed in the hope that it will be useful,       *
+#*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+#*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+#*   GNU Lesser General Public License for more details.                   *
+#*                                                                         *
+#*   You should have received a copy of the GNU Lesser General Public      *
+#*   License along with this program; if not, write to the Free Software   *
+#*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
+#*   USA                                                                   *
+#*                                                                         *
+#***************************************************************************
+
 import numpy as np
 import json
 import Part
 import FreeCAD as App
 import RPWlib
 import math
+
+
 
 class Movement(object):
     def __init__(self,id, type,speed,name,label):
@@ -18,8 +43,17 @@ class Movement(object):
         raise NotImplementedError()
     
 
+class Action(Movement):
+    def __init__(self, id, name, label):
+        super().__init__(id, "Action", 0, name, label)
+    
+    def selfdraw(self):
+        return
+
+    
 
 class LinearMovement(Movement):
+    
     def __init__(self,id, sPoint, ePoint, speed = 50,name = "", label = ""):
         super().__init__(id,"Linear", speed,name,label)
         self.startPoint = sPoint
@@ -37,7 +71,7 @@ class LinearMovement(Movement):
             shape=App.ActiveDocument.addObject("Part::Feature", self.name)
             shape.Shape=myLine
             App.ActiveDocument.recompute()
-            shape.ViewObject.LineColor=(1.0,0.0,1.0)
+            shape.ViewObject.LineColor=RPWlib.lineColorLin
             RPWlib.MovementList.pathGrp.addObject(App.ActiveDocument.getObject(self.name))
         except:
             pass
@@ -57,7 +91,7 @@ class LinearMovement(Movement):
         shape=App.ActiveDocument.addObject("Part::Feature", name)
         shape.Shape=myLine
         App.ActiveDocument.recompute()
-        shape.ViewObject.LineColor=(1.0,0.0,1.0)
+        shape.ViewObject.LineColor=RPWlib.lineColorLin
         
         RPWlib.MovementList.pathGrp.addObject(App.ActiveDocument.getObject(name))
         
@@ -84,7 +118,7 @@ class P2PMovement(Movement):
             shape=App.ActiveDocument.addObject("Part::Feature", self.name)
             shape.Shape=myLine
             App.ActiveDocument.recompute()
-            shape.ViewObject.LineColor=(0.0,0.0,1.0)
+            shape.ViewObject.LineColor=RPWlib.lineColorP2P
             RPWlib.MovementList.pathGrp.addObject(App.ActiveDocument.getObject(self.name))  
         except:
             pass
@@ -104,7 +138,7 @@ class P2PMovement(Movement):
         shape=App.ActiveDocument.addObject("Part::Feature", name)
         shape.Shape=myLine
         App.ActiveDocument.recompute()
-        shape.ViewObject.LineColor=(0.0,0.0,1.0)
+        shape.ViewObject.LineColor=RPWlib.lineColorP2P
         RPWlib.MovementList.pathGrp.addObject(App.ActiveDocument.getObject(name))
 
 class CircularMovement(Movement):
@@ -135,7 +169,7 @@ class CircularMovement(Movement):
             shape=App.ActiveDocument.addObject("Part::Feature", self.name)
             shape.Shape=myLine
             App.ActiveDocument.recompute()
-            shape.ViewObject.LineColor=(1.0,0.0,0.0)
+            shape.ViewObject.LineColor=RPWlib.lineColorCirc
             RPWlib.MovementList.pathGrp.addObject(App.ActiveDocument.getObject(self.name))
         except:
             pass
@@ -158,8 +192,7 @@ class CircularMovement(Movement):
         shape=App.ActiveDocument.addObject("Part::Feature", name)
         shape.Shape=myLine
         App.ActiveDocument.recompute()
-        shape.ViewObject.LineColor=(1.0,0.0,0.0)
-        
+        shape.ViewObject.LineColor=RPWlib.lineColorCirc
         RPWlib.MovementList.pathGrp.addObject(App.ActiveDocument.getObject(name))
 
 if __name__ == "__main__":

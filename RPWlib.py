@@ -1,3 +1,26 @@
+#***************************************************************************
+#*                                                                         *
+#*   Copyright (c) 2021 Lerchbaumer Thomas                                 *
+#*                                                                         *
+#*                                                                         *
+#*   This program is free software; you can redistribute it and/or modify  *
+#*   it under the terms of the GNU Lesser General Public License (LGPL)    *
+#*   as published by the Free Software Foundation; either version 3 of     *
+#*   the License, or (at your option) any later version.                   *
+#*   for detail see the LICENCE text file.                                 *
+#*                                                                         *
+#*   This program is distributed in the hope that it will be useful,       *
+#*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+#*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+#*   GNU Lesser General Public License for more details.                   *
+#*                                                                         *
+#*   You should have received a copy of the GNU Lesser General Public      *
+#*   License along with this program; if not, write to the Free Software   *
+#*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
+#*   USA                                                                   *
+#*                                                                         *
+#***************************************************************************
+
 import os
 import Movements
 import RPWClasses
@@ -13,8 +36,13 @@ sphereSize = 10
 mainCMDs = None
 addSegCMDs = None
 newModCMDs = None
-
-
+lineColorPurple = (1.0,0.0,1.0)
+lineColorRed = (1.0,0.0,0.0)
+lineColorBlue = (0.0,0.0,1.0)
+lineColorCyan = (0.0,1.0,1.0)
+lineColorLin = lineColorCyan
+lineColorP2P = lineColorCyan
+lineColorCirc = lineColorCyan
 
 def pathOfModule():
     return os.path.dirname(__file__)
@@ -34,6 +62,11 @@ def reloadMovementList():
         App.Console.PrintMessage("\r\nMovements-file last edited on {} by {}".format(data["lastEditedOn"], data["lastEditor"]))
         curID = 0
         for movement in data["Movements"]:
+            if movement["type"] == "Action":
+                speed = movement["speed"]
+                label = movement["label"]
+                name = movement["name"]
+                MovementList.List.append(Movements.Action(id = curID, name = name, label = label))
             if movement["type"] == "Linear":
                 start = movement["startPoint"]
                 end = movement["endPoint"]
@@ -162,7 +195,16 @@ def reloadCSList():
 def getMovementDict(movements):
     mDict = []
     for movement in movements:
-        if movement.type == "Circular":
+        if movement.type == "Action":
+            mDict.append({
+                "type": movement.type,
+                "speed": movement.speed,
+                "label": movement.label,
+                "name": movement.name,
+                "id" : movement.id
+            }
+            )
+        elif movement.type == "Circular":
             mDict.append(
             {
                 "type": movement.type,

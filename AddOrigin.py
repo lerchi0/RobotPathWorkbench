@@ -1,3 +1,26 @@
+#***************************************************************************
+#*                                                                         *
+#*   Copyright (c) 2021 Lerchbaumer Thomas                                 *
+#*                                                                         *
+#*                                                                         *
+#*   This program is free software; you can redistribute it and/or modify  *
+#*   it under the terms of the GNU Lesser General Public License (LGPL)    *
+#*   as published by the Free Software Foundation; either version 3 of     *
+#*   the License, or (at your option) any later version.                   *
+#*   for detail see the LICENCE text file.                                 *
+#*                                                                         *
+#*   This program is distributed in the hope that it will be useful,       *
+#*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+#*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+#*   GNU Lesser General Public License for more details.                   *
+#*                                                                         *
+#*   You should have received a copy of the GNU Lesser General Public      *
+#*   License along with this program; if not, write to the Free Software   *
+#*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
+#*   USA                                                                   *
+#*                                                                         *
+#***************************************************************************
+
 import FreeCADGui as Gui
 import FreeCAD as App
 from PySide2 import QtGui
@@ -104,7 +127,7 @@ class AddOrigin():
         doc = App.activeDocument()
         deletedPoint = RPWlib.CSList.List.pop(self.current)
         try:
-            doc.removeObject("CS_{}".format(self.current))
+            doc.removeObject(deletedPoint.name)
         except:
             App.Console.PrintMessage("no previous CS found")
             App.Console.PrintMessage("\r\n")
@@ -200,13 +223,22 @@ class AddOrigin():
             App.Console.PrintMessage("end = {}\r\n".format(endPoint.Point))
             App.Console.PrintMessage("center = {}\r\n".format(pos))
             App.Console.PrintMessage("direction = {}\r\n".format(direction))
-            
-        self.form.Box_CS_X.setValue(pos[0])
-        self.form.Box_CS_Y.setValue(pos[1])
-        self.form.Box_CS_Z.setValue(pos[2])
-        self.form.Box_CS_Yaw.setValue(ori[0])
-        self.form.Box_CS_Pitch.setValue(ori[1])
-        self.form.Box_CS_Roll.setValue(ori[2])
+        self.form.Box_Combo_Parent.setEnabled(True)
+        idxCS = self.form.Box_Combo_Parent.currentIndex()
+        self.form.Box_Combo_Parent.setEnabled(False)
+        if idxCS >= 0:
+            posCS = [RPWlib.CSList.List[idxCS].position["X"],RPWlib.CSList.List[idxCS].position["Y"],RPWlib.CSList.List[idxCS].position["Z"]]
+            oriCS = [RPWlib.CSList.List[idxCS].orientation["yaw"],RPWlib.CSList.List[idxCS].orientation["pitch"],RPWlib.CSList.List[idxCS].orientation["roll"]]
+        else:
+            posCS = [0,0,0]
+            oriCS = [0,0,0]
+           
+        self.form.Box_CS_X.setValue(pos[0] - posCS[0])
+        self.form.Box_CS_Y.setValue(pos[1] - posCS[1])
+        self.form.Box_CS_Z.setValue(pos[2] - posCS[2])
+        self.form.Box_CS_Yaw.setValue(ori[0] - oriCS[0])
+        self.form.Box_CS_Pitch.setValue(ori[1] - oriCS[1])
+        self.form.Box_CS_Roll.setValue(ori[2] - oriCS[2])
         self.updateLCS()
 
 
