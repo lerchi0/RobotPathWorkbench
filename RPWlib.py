@@ -129,7 +129,7 @@ def reloadPointsList():
     for idx,el in enumerate(PointsList.List):
         _pos =  App.Vector(el.position["X"],el.position["Y"],el.position["Z"])
         _ori =  App.Rotation(el.orientation["yaw"],el.orientation["pitch"],el.orientation["roll"])
-        RPWClasses.Pathpoint.draw("Point_{}".format(idx),2,el.getTotalTransform())
+        el.selfDraw("Point_{}".format(idx),2)
     return PointsList.pathToFile
 
 def writePointsFile(points,editor):
@@ -186,10 +186,9 @@ def reloadCSList():
         CSList.List.append(cs)
     
     for el in CSList.List:
-        if el.id == 0:
-            RPWClasses.Pathpoint.draw(el.name,1,el.getTotalTransform(),True)
-        else:
-            RPWClasses.Pathpoint.draw(el.name,1,el.getTotalTransform())
+        
+        el.selfDraw(el.name,1)
+        
     return CSList.pathToFile
 
 def getMovementDict(movements):

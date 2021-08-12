@@ -60,8 +60,8 @@ class LinearMovement(Movement):
         self.endPoint = ePoint
 
     def selfdraw(self):
-        start = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(RPWlib.PointsList.List[self.startPoint["id"]].getTotalTransform())).Base
-        end = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(RPWlib.PointsList.List[self.endPoint["id"]].getTotalTransform())).Base
+        start = App.Placement(RPWlib.PointsList.List[self.startPoint["id"]].getTotalTransform()).Base
+        end = App.Placement(RPWlib.PointsList.List[self.endPoint["id"]].getTotalTransform()).Base
         try:
             App.ActiveDocument.removeObject(self.name)
         except:
@@ -79,9 +79,12 @@ class LinearMovement(Movement):
     @staticmethod
     def draw(startP, endP, name):
         startPoint = startP.getTotalTransform()
-        start = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(startPoint)).Base
+        #start = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(startPoint)).Base
+        start = App.Placement(startPoint).Base
         endPoint = endP.getTotalTransform()
-        end = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(endPoint)).Base
+        end = App.Placement(endPoint).Base
+        #end = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(endPoint)).Base
+        myLine = Part.makeLine(start, end)
         try:
             App.ActiveDocument.removeObject(name)
             
@@ -107,8 +110,8 @@ class P2PMovement(Movement):
 
 
     def selfdraw(self):
-        start = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(RPWlib.PointsList.List[self.startPoint["id"]].getTotalTransform())).Base
-        end = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(RPWlib.PointsList.List[self.endPoint["id"]].getTotalTransform())).Base
+        start = App.Placement(RPWlib.PointsList.List[self.startPoint["id"]].getTotalTransform()).Base
+        end = App.Placement(RPWlib.PointsList.List[self.endPoint["id"]].getTotalTransform()).Base
         try:
             App.ActiveDocument.removeObject(self.name)
         except:
@@ -127,9 +130,11 @@ class P2PMovement(Movement):
     @staticmethod
     def draw(startP, endP, name):
         startPoint = startP.getTotalTransform()
-        start = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(startPoint)).Base
+        #start = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(startPoint)).Base
+        start = App.Placement(startPoint).Base
         endPoint = endP.getTotalTransform()
-        end = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(endPoint)).Base
+        end = App.Placement(endPoint).Base
+        #end = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(endPoint)).Base
         myLine = Part.makeLine(start, end)
         try:
             App.ActiveDocument.removeObject(name)
@@ -153,9 +158,9 @@ class CircularMovement(Movement):
 
 
     def selfdraw(self):
-        start = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(RPWlib.PointsList.List[self.startPoint["id"]].getTotalTransform())).Base
-        mid = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(RPWlib.PointsList.List[self.midPoint["id"]].getTotalTransform())).Base
-        end = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(RPWlib.PointsList.List[self.endPoint["id"]].getTotalTransform())).Base
+        start = App.Placement(RPWlib.PointsList.List[self.startPoint["id"]].getTotalTransform()).Base
+        mid = App.Placement(RPWlib.PointsList.List[self.midPoint["id"]].getTotalTransform()).Base
+        end = App.Placement(RPWlib.PointsList.List[self.endPoint["id"]].getTotalTransform()).Base
         
 
         
@@ -178,11 +183,15 @@ class CircularMovement(Movement):
     @staticmethod
     def draw(startP, midP ,endP, name):
         startPoint = startP.getTotalTransform()
+        #start = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(startPoint)).Base
+        start = App.Placement(startPoint).Base
         midPoint = midP.getTotalTransform()
+        #start = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(startPoint)).Base
+        mid = App.Placement(midPoint).Base
         endPoint = endP.getTotalTransform()
-        start = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(startPoint)).Base
-        mid = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(midPoint)).Base
-        end   = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(endPoint)).Base
+        end = App.Placement(endPoint).Base
+        #end = App.Placement(RPWlib.CSList.List[0].getTransform().multiply(endPoint)).Base
+        
         arc = Part.Arc(start,mid,end)
         try:
             App.ActiveDocument.removeObject(name)

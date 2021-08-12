@@ -66,7 +66,7 @@ class AddOrigin():
         self.form.Box_CS_Roll.blockSignals(True)
         self.form.Box_Combo_Parent.blockSignals(True)
         cs = RPWlib.CSList.List[self.form.listWidget.currentRow()]
-        self.current = cs.id
+        self.current =self.form.listWidget.currentRow()
         self.form.Box_Combo_Parent.clear()
         for idx, el in enumerate(RPWlib.CSList.List):
             self.form.Box_Combo_Parent.addItem(el.name)
@@ -103,11 +103,9 @@ class AddOrigin():
 
     def drawLCS(self, trafo):
         cs = RPWlib.CSList.List[self.current]
-        if cs.id == 0:
-            RPWClasses.Pathpoint.draw(cs.name,1,trafo, True)
-            
-        else:
-            RPWClasses.Pathpoint.draw(cs.name,1,trafo)
+        
+        cs.selfDraw(cs.name,1)
+        
 
     def addCS(self):
         App.Console.PrintMessage("adding new CS")

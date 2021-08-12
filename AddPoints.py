@@ -95,7 +95,8 @@ class AddPoints():
         
 
     def drawSphere(self, trafo):
-        RPWClasses.Pathpoint.draw("Point_{}".format(self.current),2,trafo)
+        pt = RPWlib.PointsList.List[self.current]
+        pt.selfDraw("Point_{}".format(self.current),2)
 
     def addPoint(self):
         idxCS = self.form.Box_Combo_CS.currentIndex()
@@ -162,35 +163,52 @@ class AddPoints():
         except Exception:
             object_Label = ""
             object_Name  = ""
+        
+        pos = [0,0,0]
+        ori = [0,0,0]
         try:
-            SubElement = Gui.Selection.getSelectionEx()[0]   
-            element_ = SubElement.SubObjects[0]
-        except Exception:
+            SubElement = Gui.Selection.getSelectionEx()[0]
+            if SubElement.TypeName == "PartDesign::CoordinateSystem":
+                element_ = App.ActiveDocument.getObject(SubElement.ObjectName)
+                pos = element_.Placement.Base
+            else:
+                element_ = SubElement.SubObjects[0]
+                if (element_.ShapeType == "Vertex"):
+                    pos = element_.Point
+                    ori = [0,0,0]
+                elif (element_.ShapeType == "Face"):
+                    pos = element_.BoundBox.Center
+                    normalVect = element_.normalAt(0,0)
+                    ori = [0,0,0]
+                elif (element_.ShapeType == "Edge"):
+                    startPoint = element_.Vertexes[0]
+                    endPoint = element_.Vertexes[1]
+                    direction = endPoint.Point - startPoint.Point
+                    
+                    pos = startPoint.Point + 0.5*direction
+                    
+                    ori = [0,0,0]
+        except Exception as e:
+            App.Console.PrintMessage(e)
             element_ = ""
-        App.Console.PrintMessage("Type: {}\r\n".format(element_.ShapeType))
-        if (element_.ShapeType == "Vertex"):
-            pos = element_.Point
-            ori = [0,0,0]
-        elif (element_.ShapeType == "Face"):
-            pos = element_.BoundBox.Center
-            normalVect = element_.normalAt(0,0)
-            ori = [0,0,0]
-        elif (element_.ShapeType == "Edge"):
-            startPoint = element_.Vertexes[0]
-            endPoint = element_.Vertexes[1]
-            direction = endPoint.Point - startPoint.Point
-            pos = startPoint.Point + 0.5*direction
-            ori = [0,0,0]
-        idxCS = self.form.Box_Combo_CS.currentIndex()
-        posCS = [RPWlib.CSList.List[idxCS].position["X"],RPWlib.CSList.List[idxCS].position["Y"],RPWlib.CSList.List[idxCS].position["Z"]]
-        oriCS = [RPWlib.CSList.List[idxCS].orientation["yaw"],RPWlib.CSList.List[idxCS].orientation["pitch"],RPWlib.CSList.List[idxCS].orientation["roll"]]
-
-        self.form.Box_Point_X.setValue(pos[0] - posCS[0])
-        self.form.Box_Point_Y.setValue(pos[1] - posCS[1])
-        self.form.Box_Point_Z.setValue(pos[2] - posCS[2])
-        self.form.Box_Point_Yaw.setValue(ori[0] - oriCS[0])
-        self.form.Box_Point_Pitch.setValue(ori[1] - oriCS[1])
-        self.form.Box_Point_Roll.setValue(ori[2] - oriCS[2])
+        
+        try:
+            pt = RPWClasses.Pathpoint({"X": pos[0],"Y": pos[1],"Z": pos[2] },{"yaw": ori[0],"pitch": ori[1],"roll": ori[2]},None)
+            
+            idxCS = self.form.Box_Combo_CS.currentIndex()
+            if idxCS != 0:
+                trafo = pt.getInverseTransform().multiply(RPWlib.CSList.List[0].getTransform().multiply(RPWlib.CSList.List[idxCS].getTransform())).inverse()
+            else:
+                trafo = pt.getInverseTransform().multiply(RPWlib.CSList.List[0].getTransform()).inverse()
+            posFin = App.Placement(trafo).Base
+        except Exception as e:
+            App.Console.PrintMessage(e)
+        self.form.Box_Point_X.setValue(posFin[0])
+        self.form.Box_Point_Y.setValue(posFin[1])
+        self.form.Box_Point_Z.setValue(posFin[2])
+        self.form.Box_Point_Yaw.setValue(ori[0])
+        self.form.Box_Point_Pitch.setValue(ori[1])
+        self.form.Box_Point_Roll.setValue(ori[2])
         self.updateSphere()
 
     def accept(self):

@@ -54,14 +54,9 @@ class ReloadViewCmd():
 
         try:
             for cs in RPWlib.CSList.List:
-                trafo = cs.getTotalTransform()
-                if cs.id == 0:
-                    RPWClasses.Pathpoint.draw(cs.name,1,trafo, True)
-                else:
-                    RPWClasses.Pathpoint.draw(cs.name,1,trafo)
+                cs.selfDraw(cs.name,1)
             for id,pt in enumerate(RPWlib.PointsList.List):
-                trafo = pt.getTotalTransform()
-                RPWClasses.Pathpoint.draw("Point_{}".format(id),2,trafo)
+                pt.selfDraw(f"Point_{id}", 2)
             for mv in RPWlib.MovementList.List:
                 mv.selfdraw()
         except Exception as e:

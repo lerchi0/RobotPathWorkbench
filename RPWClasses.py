@@ -43,7 +43,11 @@ class Pathpoint:
         self.coordinateSystem = coordSystem
         if coordSystem != None:
             cs = RPWlib.CSList.List[coordSystem]
-            place = App.Placement(self.getTotalTransform())
+            if coordSystem != 0:
+                csTrafo = cs.getTransform()
+            else:
+                csTrafo = App.Base.Matrix()
+            place = App.Placement(csTrafo.multiply(self.getTransform()))
             self.position["X"] = round(place.Base.x,2)
             self.position["Y"] = round(place.Base.y,2)
             self.position["Z"] = round(place.Base.z,2)
@@ -93,23 +97,21 @@ class Pathpoint:
             cs = RPWlib.CSList.List[parent]
         while len(parentList) != 0:
             cs = RPWlib.CSList.List[parentList.pop()]
-            if cs.id != 0:
-                totalTransform = totalTransform.multiply(cs.getTransform())
+            totalTransform = totalTransform.multiply(cs.getTransform())
         totalTransform = totalTransform*self.getTransform()
         return totalTransform
+    def getInverseTransform(self):
+        totalTransform = self.getTotalTransform()
+        return totalTransform.inverse()
 
-    @staticmethod
-    def draw(name, _type, trafo, isBase = False):
+    def selfDraw(self,name, _type):
         doc = App.ActiveDocument
         try:
             doc.removeObject(name)
         except Exception as e:
             pass
-
+        trafo = self.getTotalTransform()
         lcs = doc.addObject('PartDesign::CoordinateSystem',name)
-        if not isBase:
-            trafo = RPWlib.CSList.List[0].getTransform().multiply(trafo)
-        
         lcs.Placement = App.Placement(trafo)
         try:
             if _type == 1:
@@ -118,6 +120,27 @@ class Pathpoint:
                 RPWlib.PointsList.pointsGrp.addObject(App.ActiveDocument.getObject(name))
         except Exception as e:
             App.Console.PrintMessage(e)
+
+    # @staticmethod
+    # def draw(name, _type, trafo, isBase = False):
+    #     doc = App.ActiveDocument
+    #     try:
+    #         doc.removeObject(name)
+    #     except Exception as e:
+    #         pass
+
+    #     lcs = doc.addObject('PartDesign::CoordinateSystem',name)
+    #     if not isBase:
+    #         trafo = RPWlib.CSList.List[0].getTransform().multiply(trafo)
+        
+    #     lcs.Placement = App.Placement(trafo)
+    #     try:
+    #         if _type == 1:
+    #             RPWlib.CSList.csGrp.addObject(App.ActiveDocument.getObject(name))
+    #         elif _type == 2:
+    #             RPWlib.PointsList.pointsGrp.addObject(App.ActiveDocument.getObject(name))
+    #     except Exception as e:
+    #         App.Console.PrintMessage(e)
 
 
 class CoordinateSystem(Pathpoint):
@@ -141,27 +164,39 @@ class ProjectConfiguration:
         if self.configFile == "":
             configFilePath, Filter = PySide2.QtWidgets.QFileDialog.getSaveFileName(None, "Choose the config-file",  "/", "config files  (*.cfg);;")
             self.configFile = configFilePath
-    
+            try:
+                f = open(self.configFile)
+                f.close()
+            except:
+                f = open(self.configFile, "w")
+                f.close()
+        self.configData = {}
 
 
     def readConfig(self):
         keys = ["PathToCell","PathToCoordinateSystems","PathToPoints","PathToMovements","CreatedOn","EditedOn","Origin"]
-        
+        data= {}
         try:
             f = open(self.configFile)
             data = json.load(f)
             f.close()
         except:
-            data= {}
-        for key in keys:
-            if key in data == False:
-                if key != "CreatedOn":
-                    data[key] = None
-                data["CreatedOn"] = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")  
-        
-        
+            pass
+         
+        App.Console.PrintMessage(f"\r\nData: {data}\r\n")
+         
+        try:
+            for key in keys:
+                    if key not in data:
+                        App.Console.PrintMessage(f"\r\nKey: {key}\r\n")
+                        if key != "CreatedOn":
+                            data[key] = None
+                        data["CreatedOn"] = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+        except Exception as e:
+            App.Console.PrintMessage(f"\r\n{e}\r\n")
         self.configData = data
-
+        App.Console.PrintMessage(f"\r\n{self.configData}\r\n")
+        App.Console.PrintMessage(f"{data}\r\n")
         if self.configData["PathToCell"] == None or self.configData["PathToCell"] == "":
             cellPath, Filter = PySide2.QtWidgets.QFileDialog.getSaveFileName(None, "Choose the robot cell",  "/", "Robot cells  (*.FCStd);;")
             self.configData["PathToCell"] = cellPath
